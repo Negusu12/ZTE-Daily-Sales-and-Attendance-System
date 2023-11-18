@@ -1,0 +1,204 @@
+body {
+  font-size: 14px;
+  background: #03949B;
+  margin: 2%;
+  margin-left: 5%;
+  margin-right: 5%;
+  overflow-x: hidden;
+}
+
+/** ----------------------------logout----------------------------- **/
+
+.div-logout {
+  padding-top: 20px;
+}
+
+@media (max-width: 800px) {
+  .div-logout {
+    padding-top: 20px;
+  }
+}
+
+.div-logout a {
+  width: 10%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding-top: 20px;
+  margin-left: 90%;
+}
+
+.div-logout a:hover {
+  text-decoration: none;
+  background-color: #B2B435;
+  font-display: #fff;
+  font-weight: bold;
+}
+
+@media (max-width: 1800px) {
+  .div-logout a {
+    margin-left: 80%;
+    width: 100px;
+    height: 50px;
+  }
+
+  .div-logout a:hover {
+    text-decoration: none;
+    background-color: #B2B435;
+    font-display: #fff;
+    font-weight: bold;
+  }
+}
+
+.class-logout {
+  font-family: Montserrat-Bold;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #fff;
+  text-transform: uppercase;
+  width: 100px;
+  height: 50px;
+  border-radius: 25px;
+  background: #4D7DBF;
+}
+
+@media (max-width: 1800px) {
+  .class-logout {
+    padding: 36px;
+  }
+}
+
+
+.username {
+  padding-left: 40%;
+  padding-bottom: 30px;
+  font-size: 30px;
+  font-weight: bold;
+  text-transform: capitalize;
+  color: #26225B;
+}
+
+@media (max-width: 700px) {
+  .username {
+    padding-left: 10%;
+    padding-bottom: 30px;
+  }
+}
+
+.tbl-header {
+  width: 100%;
+}
+
+.tbll {
+  background-color: #4D7DBF;
+}
+
+/*----------------------------------------------------------------edit------------------------------------------------*/
+
+.edit-h {
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 0;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+  background-color: #2f95d5;
+
+}
+
+.labela1 {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  font-size: 25px;
+  display: inline-block;
+  color: #4c47df;
+  font-family: poppins;
+}
+
+.selecta1 {
+  display: inline-block;
+  width: 200px;
+}
+
+.filterr {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.submita1 {
+  color: #fff;
+  background-color: #4c47df;
+  border-color: #007bff;
+  height: 40px;
+}
+
+/*----------loading Image---------------*/
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #82defa;
+  transition: opacity 0.75s, visibility 0.75s;
+  z-index: 9999;
+  /* Set a high z-index value */
+}
+
+.loader--hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/*------Spining Circle------
+.loader::after {
+  content: "";
+  width: 75px;
+  height: 75px;
+  border: 15px solid #dddddd;
+  border-top-color: #009578;
+  border-radius: 50%;
+  animation: loading 0.75s ease infinite;
+}
+*/
+.logoo {
+  width: 20%;
+  height: 35%;
+  animation: spin 1s linear infinite;
+}
+
+@media screen and (max-width: 800px) {
+  .logoo {
+    width: 150px;
+    height: 150px;
+    animation: spin 1s linear infinite;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+/*---------- End loading Image---------------*/
+/*---------- excel, pdf, backgroundcolor ---------------*/
+
+.dt-buttons .buttons-excel,
+.dt-buttons .buttons-pdf,
+.dt-buttons .buttons-colvis {
+  background-color: #4D7DBF;
+  border-color: #4D7DBF;
+}
