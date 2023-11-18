@@ -20,7 +20,7 @@ if ($user_data['role'] == 2) {
 <html>
 
 <head>
-    <title>Report Weekly Sales</title>
+    <title>Attendance Sheet</title>
     <link rel="icon" type="image/png" href="images/logo.png" />
     <link rel="stylesheet" href="css/bootstrap/bootstrap.css">
     <link rel="stylesheet" href="css/bootstrap/dataTables.bootstrap4.min.css">
@@ -70,7 +70,7 @@ if ($user_data['role'] == 2) {
         <a href="logout.php" class="class-logout">Logout</a><br>
         <a href="signup.php" class="class-logout">Signup</a>
     </div>
-    <div class="username"> Hellow <?php echo $user_data['user_name']; ?>
+    <div class="username"> Attendance Sheet
     </div>
     <!-- Rest of the form -->
 

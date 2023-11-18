@@ -16,7 +16,7 @@ $user_data = check_login($con);
 <html>
 
 <head>
-    <title>Report Weekly Sales</title>
+    <title>Users</title>
     <link rel="icon" type="image/png" href="images/logo.png" />
     <link rel="stylesheet" href="css/bootstrap/bootstrap.css">
     <link rel="stylesheet" href="css/bootstrap/dataTables.bootstrap4.min.css">
@@ -66,7 +66,7 @@ $user_data = check_login($con);
         <a href="logout.php" class="class-logout">Logout</a><br>
         <a href="signup.php" class="class-logout">Signup</a>
     </div>
-    <div class="username"> Hellow <?php echo $user_data['user_name']; ?>
+    <div class="username"> User List
     </div>
     <!-- Rest of the form -->
 
@@ -112,7 +112,8 @@ $user_data = check_login($con);
                             echo "<td>" . $row['promoter_name'] . "</td>";
                             echo "<td>" . $row['promoter_phone'] . "</td>";
                             echo "<td>" . $row['shop'] . "</td>";
-                            echo "<td>" . $row['role'] . "</td>";
+                            echo "<td>" . ($row['role'] == 1 ? 'Admin' : ($row['role'] == 2 ? 'Sales' : '')) . "</td>";
+
                             echo "<td>
         <a class='btn btn-success' href='edit.php?id=$row[id]'>Edit</a>
         <button class='btn btn-danger' onclick='confirmDelete($row[id])'>Delete</button>

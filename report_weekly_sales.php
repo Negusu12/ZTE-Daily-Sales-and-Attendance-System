@@ -69,7 +69,7 @@ if ($user_data['role'] == 2) {
         <a href="logout.php" class="class-logout">Logout</a><br>
         <a href="signup.php" class="class-logout">Signup</a>
     </div>
-    <div class="username"> Hellow <?php echo $user_data['user_name']; ?>
+    <div class="username"> Report Weekly Sales
     </div>
     <!-- Rest of the form -->
 

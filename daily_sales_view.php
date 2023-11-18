@@ -69,7 +69,7 @@ $user_data = check_login($con);
             <option value="3">Users</option>
         </select>
     <?php endif; ?>
-    <div class="username"> Report Daily Sales
+    <div class="username"> Hellow <?php echo $user_data['user_name']; ?>
     </div>
     <!-- Rest of the form -->
 

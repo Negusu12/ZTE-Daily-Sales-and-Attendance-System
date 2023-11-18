@@ -325,115 +325,117 @@ $user_data = check_login($con);
         <h1>Name of the Shop</h1><input type="text" readonly name="shop" value="<?php echo $user_data['shop']; ?>"><br>
         <h1>Shop level (Circle One): Grand/Premium/Higher</h1><br>
       </div>
-      <table>
-        <thead>
-          <tr>
-            <th>Model</th>
-            <th>Available Stock/Morning</th>
-            <th>Number of Apparatus Sold</th>
-            <th>Net Stock at the end of the Day</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>A33 CORE</td>
-            <td><input type="number" name="a33_core_available" id="a33_core_available"></td>
-            <td><input type="number" name="a33_core_sold" id="a33_core_sold" oninput="calculateStock('a33_core')"></td>
-            <td><input type="number" name="a33_core_left" id="a33_core_left" readonly class="ro"></td>
-          </tr>
-          <tr>
-            <td>A31 Lite</td>
-            <td><input type="number" name="a31_lite_available" id="a31_lite_available"></td>
-            <td><input type="number" name="a31_lite_sold" id="a31_lite_sold" oninput="calculateStock('a31_lite')"></td>
-            <td><input type="number" name="a31_lite_left" id="a31_lite_left" readonly class="ro"></td>
-          </tr>
-          <tr>
-            <td>Blade A31</td>
-            <td><input type="number" name="blade_a31_available" id="blade_a31_available"></td>
-            <td><input type="number" name="blade_a31_sold" id="blade_a31_sold" oninput="calculateStock('blade_a31')"></td>
-            <td><input type="number" name="blade_a31_left" id="blade_a31_left" readonly class="ro"></td>
-          </tr>
-          <tr>
-            <td>Blade A51</td>
-            <td><input type="number" name="blade_a51_available" id="blade_a51_available"></td>
-            <td><input type="number" name="blade_a51_sold" id="blade_a51_sold" oninput="calculateStock('blade_a51')"></td>
-            <td><input type="number" name="blade_a51_left" id="blade_a51_left" readonly class="ro"></td>
-          </tr>
-          <tr>
-            <td>Blade A71</td>
-            <td><input type="number" name="blade_a71_available" id="blade_a71_available"></td>
-            <td><input type="number" name="blade_a71_sold" id="blade_a71_sold" oninput="calculateStock('blade_a71')"></td>
-            <td><input type="number" name="blade_a71_left" id="blade_a71_left" readonly class="ro"></td>
-          </tr>
-          <tr>
-            <td>Blade V30</td>
-            <td><input type="number" name="blade_v30_available" id="blade_v30_available"></td>
-            <td><input type="number" name="blade_v30_sold" id="blade_v30_sold" oninput="calculateStock('blade_v30')"></td>
-            <td><input type="number" name="blade_v30_left" id="blade_v30_left" readonly class="ro"></td>
-          </tr>
-          <tr>
-            <td>MF971L</td>
-            <td><input type="number" name="mf971L_available" id="mf971L_available"></td>
-            <td><input type="number" name="mf971L_sold" id="mf971L_sold" oninput="calculateStock('mf971L')"></td>
-            <td><input type="number" name="mf971L_left" id="mf971L_left" readonly class="ro"></td>
-          </tr>
-          <tr>
-            <td>MF286C</td>
-            <td><input type="number" name="mf286c_available" id="mf286c_available"></td>
-            <td><input type="number" name="mf286c_sold" id="mf286c_sold" oninput="calculateStock('mf286c')"></td>
-            <td><input type="number" name="mf286c_left" id="mf286c_left" readonly class="ro"></td>
-          </tr>
-        </tbody>
-      </table>
-      <br>
-      <div class="info">
-        <input type="textarea" name="remark" placeholder="Remark">
-      </div><br>
-      <input type="submit" name="submit">
+      <?php if ($user_data['role'] == 2) : ?>
+        <table>
+          <thead>
+            <tr>
+              <th>Model</th>
+              <th>Available Stock/Morning</th>
+              <th>Number of Apparatus Sold</th>
+              <th>Net Stock at the end of the Day</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>A33 CORE</td>
+              <td><input type="number" name="a33_core_available" id="a33_core_available"></td>
+              <td><input type="number" name="a33_core_sold" id="a33_core_sold" oninput="calculateStock('a33_core')"></td>
+              <td><input type="number" name="a33_core_left" id="a33_core_left" readonly class="ro"></td>
+            </tr>
+            <tr>
+              <td>A31 Lite</td>
+              <td><input type="number" name="a31_lite_available" id="a31_lite_available"></td>
+              <td><input type="number" name="a31_lite_sold" id="a31_lite_sold" oninput="calculateStock('a31_lite')"></td>
+              <td><input type="number" name="a31_lite_left" id="a31_lite_left" readonly class="ro"></td>
+            </tr>
+            <tr>
+              <td>Blade A31</td>
+              <td><input type="number" name="blade_a31_available" id="blade_a31_available"></td>
+              <td><input type="number" name="blade_a31_sold" id="blade_a31_sold" oninput="calculateStock('blade_a31')"></td>
+              <td><input type="number" name="blade_a31_left" id="blade_a31_left" readonly class="ro"></td>
+            </tr>
+            <tr>
+              <td>Blade A51</td>
+              <td><input type="number" name="blade_a51_available" id="blade_a51_available"></td>
+              <td><input type="number" name="blade_a51_sold" id="blade_a51_sold" oninput="calculateStock('blade_a51')"></td>
+              <td><input type="number" name="blade_a51_left" id="blade_a51_left" readonly class="ro"></td>
+            </tr>
+            <tr>
+              <td>Blade A71</td>
+              <td><input type="number" name="blade_a71_available" id="blade_a71_available"></td>
+              <td><input type="number" name="blade_a71_sold" id="blade_a71_sold" oninput="calculateStock('blade_a71')"></td>
+              <td><input type="number" name="blade_a71_left" id="blade_a71_left" readonly class="ro"></td>
+            </tr>
+            <tr>
+              <td>Blade V30</td>
+              <td><input type="number" name="blade_v30_available" id="blade_v30_available"></td>
+              <td><input type="number" name="blade_v30_sold" id="blade_v30_sold" oninput="calculateStock('blade_v30')"></td>
+              <td><input type="number" name="blade_v30_left" id="blade_v30_left" readonly class="ro"></td>
+            </tr>
+            <tr>
+              <td>MF971L</td>
+              <td><input type="number" name="mf971L_available" id="mf971L_available"></td>
+              <td><input type="number" name="mf971L_sold" id="mf971L_sold" oninput="calculateStock('mf971L')"></td>
+              <td><input type="number" name="mf971L_left" id="mf971L_left" readonly class="ro"></td>
+            </tr>
+            <tr>
+              <td>MF286C</td>
+              <td><input type="number" name="mf286c_available" id="mf286c_available"></td>
+              <td><input type="number" name="mf286c_sold" id="mf286c_sold" oninput="calculateStock('mf286c')"></td>
+              <td><input type="number" name="mf286c_left" id="mf286c_left" readonly class="ro"></td>
+            </tr>
+          </tbody>
+        </table>
+        <br>
+        <div class="info">
+          <input type="textarea" name="remark" placeholder="Remark">
+        </div><br>
+        <input type="submit" name="submit">
     </form>
-    <script src="js/sweetalert2.min.js"></script>
+  <?php endif; ?>
+  <script src="js/sweetalert2.min.js"></script>
 
-    <!--Subtraction -->
-    <script>
-      function calculateStock(model) {
-        var availableStock = parseInt(document.getElementById(model + '_available').value) || 0;
-        var soldApparatus = parseInt(document.getElementById(model + '_sold').value) || 0;
-        var netStock = availableStock - soldApparatus;
-        document.getElementById(model + '_left').value = netStock >= 0 ? netStock : 0;
-      }
+  <!--Subtraction -->
+  <script>
+    function calculateStock(model) {
+      var availableStock = parseInt(document.getElementById(model + '_available').value) || 0;
+      var soldApparatus = parseInt(document.getElementById(model + '_sold').value) || 0;
+      var netStock = availableStock - soldApparatus;
+      document.getElementById(model + '_left').value = netStock >= 0 ? netStock : 0;
+    }
 
-      // Add event listeners for both input fields in each row
-      ['a33_core', 'a31_lite', 'blade_a31', 'blade_a51', 'blade_a71', 'blade_v30', 'mf971L', 'mf286c'].forEach(function(model) {
-        document.getElementById(model + '_available').addEventListener('input', function() {
-          calculateStock(model);
-        });
-
-        document.getElementById(model + '_sold').addEventListener('input', function() {
-          calculateStock(model);
-        });
+    // Add event listeners for both input fields in each row
+    ['a33_core', 'a31_lite', 'blade_a31', 'blade_a51', 'blade_a71', 'blade_v30', 'mf971L', 'mf286c'].forEach(function(model) {
+      document.getElementById(model + '_available').addEventListener('input', function() {
+        calculateStock(model);
       });
-    </script>
-    <!--Subtraction End-->
-    <!--select box redirection -->
-    <script>
-      function redirectToPage() {
-        var selectBox = document.getElementById("text");
-        var selectedValue = selectBox.value;
 
-        if (selectedValue === "1") {
-          window.location.href = "report_daily_sales";
-        } else if (selectedValue === "2") {
-          window.location.href = "report_weekly_sales";
-        } else if (selectedValue === "3") {
-          window.location.href = "users";
-        } else if (selectedValue === "4") {
-          window.location.href = "attendance";
-        } else if (selectedValue === "5") {
-          window.location.href = "attendance_sheet";
-        }
+      document.getElementById(model + '_sold').addEventListener('input', function() {
+        calculateStock(model);
+      });
+    });
+  </script>
+  <!--Subtraction End-->
+  <!--select box redirection -->
+  <script>
+    function redirectToPage() {
+      var selectBox = document.getElementById("text");
+      var selectedValue = selectBox.value;
+
+      if (selectedValue === "1") {
+        window.location.href = "report_daily_sales";
+      } else if (selectedValue === "2") {
+        window.location.href = "report_weekly_sales";
+      } else if (selectedValue === "3") {
+        window.location.href = "users";
+      } else if (selectedValue === "4") {
+        window.location.href = "attendance";
+      } else if (selectedValue === "5") {
+        window.location.href = "attendance_sheet";
       }
-    </script>
-    <!-- select box redirection end -->
+    }
+  </script>
+  <!-- select box redirection end -->
   </div>
 </body>
 

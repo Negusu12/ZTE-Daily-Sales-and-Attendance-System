@@ -6,6 +6,19 @@ include("functions.php");
 
 $user_data = check_login($con);
 
+// Retrieve data from the database
+$sql = "SELECT * FROM daily_sales";
+$result = mysqli_query($con, $sql);
+
+// Fetch unique ID numbers
+$id = array();
+while ($row = mysqli_fetch_assoc($result)) {
+    $id[] = $row['id'];
+}
+
+// Remove duplicate ID numbers
+$id = array_unique($id);
+
 ?>
 
 <!DOCTYPE html>
@@ -69,15 +82,15 @@ $user_data = check_login($con);
             <option value="3">Users</option>
         </select>
     <?php endif; ?>
-    <div class="username"> Report Daily Sales
+    <div class="username"> Hellow <?php echo $user_data['user_name']; ?>
     </div>
     <!-- Rest of the form -->
 
 
     <?php
     // Iterate over the unique ID numbers and display each set of records in a separate table
-    {
-        $result = mysqli_query($con, "SELECT * FROM daily_sales_view");
+    foreach ($id as $id) {
+        $result = mysqli_query($con, "SELECT * FROM daily_sales WHERE id = '$id'");
     ?>
         <section class="tbl-header table-responsive">
 
@@ -102,17 +115,59 @@ $user_data = check_login($con);
                         // Iterate over the retrieved data and display in table rows
 
                         while ($row = mysqli_fetch_assoc($result)) {
+                            $doc_date = date("d F Y", strtotime($row['doc_date']));
 
                             echo "<tr>";
-                            echo "<td>" . $row['promoter_name'] . "</td>";
-                            echo "<td>" . $row['promoter_phone'] . "</td>";
-                            echo "<td>" . $row['shop'] . "</td>";
-                            echo "<td>" . $row['model'] . "</td>";
-                            echo "<td>" . $row['available_stock'] . "</td>";
-                            echo "<td>" . $row['apparatus_sold'] . "</td>";
-                            echo "<td>" . $row['net_stock'] . "</td>";
-                            echo "<td>" . $row['document_date'] . "</td>";
-                            echo "<td>" . $row['remark'] . "</td>";
+                            echo "<td rowspan='8' style='vertical-align: middle; text-align: center;'>" . $row['promoter_name'] . "</td>";
+                            echo "<td rowspan='8' style='vertical-align: middle; text-align: center;'>" . $row['promoter_phone'] . "</td>";
+                            echo "<td rowspan='8' style='vertical-align: middle; text-align: center;'>" . $row['shop'] . "</td>";
+                            echo "<td> A33 CORE </td>";
+                            echo "<td>" . $row['a33_core_available'] . "</td>";
+                            echo "<td>" . $row['a33_core_sold'] . "</td>";
+                            echo "<td>" . $row['a33_core_left'] . "</td>";
+                            echo "<td rowspan='8' style='vertical-align: middle; text-align: center;'>" . date('l F j Y H:i', strtotime($row['doc_date'])) . "</td>";
+                            echo "<td rowspan='8' style='vertical-align: middle; text-align: center;'>" . $row['remark'] . "</td>";
+                            echo "</tr>";
+                            echo "<tr>";
+                            echo "<td> A31 Lite </td>";
+                            echo "<td>" . $row['a31_lite_available'] . "</td>";
+                            echo "<td>" . $row['a31_lite_sold'] . "</td>";
+                            echo "<td>" . $row['a31_lite_left'] . "</td>";
+                            echo "</tr>";
+                            echo "<tr>";
+                            echo "<td> Blade A31 </td>";
+                            echo "<td>" . $row['blade_a31_available'] . "</td>";
+                            echo "<td>" . $row['blade_a31_sold'] . "</td>";
+                            echo "<td>" . $row['blade_a31_left'] . "</td>";
+                            echo "</tr>";
+                            echo "<tr>";
+                            echo "<td> Blade A51 </td>";
+                            echo "<td>" . $row['blade_a51_available'] . "</td>";
+                            echo "<td>" . $row['blade_a51_sold'] . "</td>";
+                            echo "<td>" . $row['blade_a51_left'] . "</td>";
+                            echo "</tr>";
+                            echo "<tr>";
+                            echo "<td> Blade A71 </td>";
+                            echo "<td>" . $row['blade_a71_available'] . "</td>";
+                            echo "<td>" . $row['blade_a71_sold'] . "</td>";
+                            echo "<td>" . $row['blade_a71_left'] . "</td>";
+                            echo "</tr>";
+                            echo "<tr>";
+                            echo "<td> Blade V30 </td>";
+                            echo "<td>" . $row['blade_v30_available'] . "</td>";
+                            echo "<td>" . $row['blade_v30_sold'] . "</td>";
+                            echo "<td>" . $row['blade_v30_left'] . "</td>";
+                            echo "</tr>";
+                            echo "<tr>";
+                            echo "<td> MF971L </td>";
+                            echo "<td>" . $row['mf971L_available'] . "</td>";
+                            echo "<td>" . $row['mf971L_sold'] . "</td>";
+                            echo "<td>" . $row['mf971L_left'] . "</td>";
+                            echo "</tr>";
+                            echo "<td> MF286C </td>";
+                            echo "<td>" . $row['mf286c_available'] . "</td>";
+                            echo "<td>" . $row['mf286c_sold'] . "</td>";
+                            echo "<td>" . $row['mf286c_left'] . "</td>";
                             echo "</tr>";
                         }
                         ?>
@@ -146,15 +201,6 @@ $user_data = check_login($con);
 
     <script>
         $(document).ready(function() {
-            // Check if DataTable is already initialized
-            var isDataTableInitialized = $.fn.DataTable.isDataTable('#mydatatable');
-
-            // If DataTable is initialized, destroy it
-            if (isDataTableInitialized) {
-                $('#mydatatable').DataTable().destroy();
-            }
-
-            // Initialize DataTable
             var table = $('#mydatatable').DataTable({
                 ordering: true,
                 buttons: ['excel', 'pdf', 'colvis'],
@@ -165,16 +211,14 @@ $user_data = check_login($con);
                 ]
             });
 
-            // Add a text input for each column in the header
+
             table.columns().every(function() {
                 var that = this;
-
-                // Create the text input element
-                var input = $('<input type="text" class="form-control" placeholder="Filter"/>')
-                    .appendTo($(this.header()))
-                    .on('keyup change', function() {
-                        that.search($(this).val()).draw();
-                    });
+                $('input', this.header()).on('keyup change', function() {
+                    if (that.search() !== this.value) {
+                        that.search(this.value).draw();
+                    }
+                });
             });
 
             table.buttons().container()
