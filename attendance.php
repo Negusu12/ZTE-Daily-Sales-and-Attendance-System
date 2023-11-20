@@ -3,40 +3,12 @@ session_start();
 
 include("connect.php");
 include("functions.php");
+include("backend/insert.php");
 
 $user_data = check_login($con);
 
-if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    // Get other form data
-    $latitude = isset($_POST['latitude']) ? $_POST['latitude'] : null;
-    $longitude = isset($_POST['longitude']) ? $_POST['longitude'] : null;
-    $remark = isset($_POST['remark']) ? $_POST['remark'] : '';
-
-    // Use prepared statement to avoid SQL injection
-    $query = "INSERT INTO attendance_sheet (user_id, present, absent, location, latitude, longitude, remark, attendance_time)
-            VALUES (?, 'Yes', '', '', ?, ?, ?, NOW())";
-
-    $stmt = mysqli_prepare($con, $query);
-
-    // Bind parameters
-    mysqli_stmt_bind_param($stmt, "isss", $user_data['id'], $latitude, $longitude, $remark);
-
-    // Execute the statement
-    $result = mysqli_stmt_execute($stmt);
-
-    // Handle success or failure
-    if ($result) {
-        // Success
-        echo "<script>alert('Attendance recorded successfully!');</script>";
-    } else {
-        // Failure
-        echo "<script>alert('Failed to record attendance.');</script>";
-    }
-
-    // Close the statement
-    mysqli_stmt_close($stmt);
-}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -249,7 +221,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                     <thead>
                         <tr>
                             <th>Date</th>
-                            <th>Present</th>
+                            <th>Check In</th>
+                            <th>Check Out</th>
                             <th>Remark</th>
                         </tr>
                     </thead>
@@ -258,7 +231,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                             <td><?php echo date('F j'); ?></td>
                             <input type="hidden" name="latitude" id="latitude">
                             <input type="hidden" name="longitude" id="longitude">
-                            <td><input type="submit" name="present" id="present" value="Present"></td>
+                            <input type="hidden" name="latitude_check_out" id="latitude_check_out">
+                            <input type="hidden" name="longitude_check_out" id="longitude_check_out">
+                            <td><input type="submit" name="present" id="present" value="Check In" onclick="getLocationAndSubmit(event, false)"></td>
+                            <td><input type="submit" name="check_out" id="check_out" value="Check Out" onclick="getLocationAndSubmit(event, true)"></td>
+
                             <td><input type="text" name="remark" id="remark"></td>
                         </tr>
                     </tbody>
@@ -290,14 +267,20 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
         <!-- geolocation -->
         <script>
-            function getLocationAndSubmit(event) {
-                event.preventDefault(); // Prevent the form from submitting before getting the location
+            function getLocationAndSubmit(event, isCheckOut) {
+                event.preventDefault();
 
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(function(position) {
-                        document.getElementById("latitude").value = position.coords.latitude;
-                        document.getElementById("longitude").value = position.coords.longitude;
-                        document.forms[0].submit(); // Submit the form after getting the location
+                        if (isCheckOut) {
+                            document.getElementById("latitude_check_out").value = position.coords.latitude;
+                            document.getElementById("longitude_check_out").value = position.coords.longitude;
+                        } else {
+                            document.getElementById("latitude").value = position.coords.latitude;
+                            document.getElementById("longitude").value = position.coords.longitude;
+                        }
+
+                        document.forms[0].submit();
                     }, function(error) {
                         alert("Error getting location: " + error.message);
                     });

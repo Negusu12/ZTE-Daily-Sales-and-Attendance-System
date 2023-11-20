@@ -59,3 +59,71 @@ if (isset($_POST['submit'])) {
     } </script>";
   }
 }
+
+
+if (isset($_POST['check_out'])) {
+  $check_out = addslashes($_POST['check_out']);
+  $latitude_check_out = addslashes($_POST['latitude_check_out']);
+  $longitude_check_out = addslashes($_POST['longitude_check_out']);
+  $remark = addslashes($_POST['remark']);
+  $check_out_time = addslashes($_POST['check_out_time']);
+  // Check-out action
+  $sql = "INSERT INTO attendance_sheet (user_id, check_out, latitude_check_out, longitude_check_out, remark, check_out_time)
+          VALUES (?, 'Yes', ?, ?, ?, NOW())";
+
+  $result = mysqli_query($con, $sql);
+  if ($result) {
+    echo "<script> window.onload = function() { 
+    Swal.fire({
+      icon: 'success',
+      title: 'Daily Sales Recorded Successfully',
+      showConfirmButton: true,
+      confirmButtonText: 'OK',
+      timer: 2000
+    });
+  } </script>";
+  } else {
+    echo "<script> window.onload = function() {
+    Swal.fire({
+      icon: 'error',
+      title: 'Failed to Recorded Daily Sales',
+      showConfirmButton: false,
+      showDenyButton: true,
+      denyButtonText: 'OK'
+    });
+  } </script>";
+  }
+}
+if (isset($_POST['present'])) {
+  $present = addslashes($_POST['present']);
+  $latitude = addslashes($_POST['latitude']);
+  $longitude = addslashes($_POST['longitude']);
+  $remark = addslashes($_POST['remark']);
+  $check_out_time = addslashes($_POST['check_out_time']);
+  // Check-out action
+  $sql = "INSERT INTO attendance_sheet (user_id, present, latitude, longitude, remark, check_out_time)
+          VALUES (?, 'Yes', ?, ?, ?, NOW())";
+
+  $result = mysqli_query($con, $sql);
+  if ($result) {
+    echo "<script> window.onload = function() { 
+    Swal.fire({
+      icon: 'success',
+      title: 'Daily Sales Recorded Successfully',
+      showConfirmButton: true,
+      confirmButtonText: 'OK',
+      timer: 2000
+    });
+  } </script>";
+  } else {
+    echo "<script> window.onload = function() {
+    Swal.fire({
+      icon: 'error',
+      title: 'Failed to Recorded Daily Sales',
+      showConfirmButton: false,
+      showDenyButton: true,
+      denyButtonText: 'OK'
+    });
+  } </script>";
+  }
+}
