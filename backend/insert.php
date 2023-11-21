@@ -1,6 +1,7 @@
 <?php
 
 include('connect.php');
+$user_data = check_login($con);
 
 if (isset($_POST['submit'])) {
 
@@ -61,69 +62,39 @@ if (isset($_POST['submit'])) {
 }
 
 
-if (isset($_POST['check_out'])) {
-  $check_out = addslashes($_POST['check_out']);
-  $latitude_check_out = addslashes($_POST['latitude_check_out']);
-  $longitude_check_out = addslashes($_POST['longitude_check_out']);
-  $remark = addslashes($_POST['remark']);
-  $check_out_time = addslashes($_POST['check_out_time']);
-  // Check-out action
-  $sql = "INSERT INTO attendance_sheet (user_id, check_out, latitude_check_out, longitude_check_out, remark, check_out_time)
-          VALUES (?, 'Yes', ?, ?, ?, NOW())";
+if ($_SERVER['REQUEST_METHOD'] == "POST") {
+  // Get other form data
+  $latitude = isset($_POST['latitude']) ? $_POST['latitude'] : null;
+  $longitude = isset($_POST['longitude']) ? $_POST['longitude'] : null;
+  $latitude_check_out = isset($_POST['latitude_check_out']) ? $_POST['latitude_check_out'] : null;
+  $longitude_check_out = isset($_POST['longitude_check_out']) ? $_POST['longitude_check_out'] : null;
+  $remark = isset($_POST['remark']) ? $_POST['remark'] : '';
 
-  $result = mysqli_query($con, $sql);
-  if ($result) {
-    echo "<script> window.onload = function() { 
-    Swal.fire({
-      icon: 'success',
-      title: 'Daily Sales Recorded Successfully',
-      showConfirmButton: true,
-      confirmButtonText: 'OK',
-      timer: 2000
-    });
-  } </script>";
-  } else {
-    echo "<script> window.onload = function() {
-    Swal.fire({
-      icon: 'error',
-      title: 'Failed to Recorded Daily Sales',
-      showConfirmButton: false,
-      showDenyButton: true,
-      denyButtonText: 'OK'
-    });
-  } </script>";
-  }
-}
-if (isset($_POST['present'])) {
-  $present = addslashes($_POST['present']);
-  $latitude = addslashes($_POST['latitude']);
-  $longitude = addslashes($_POST['longitude']);
-  $remark = addslashes($_POST['remark']);
-  $check_out_time = addslashes($_POST['check_out_time']);
-  // Check-out action
-  $sql = "INSERT INTO attendance_sheet (user_id, present, latitude, longitude, remark, check_out_time)
-          VALUES (?, 'Yes', ?, ?, ?, NOW())";
+  // Use prepared statement to avoid SQL injection
+  $query = "INSERT INTO attendance_sheet (user_id, present, check_out, latitude, longitude, latitude_check_out, longitude_check_out, remark, attendance_time, check_out_time)
+  VALUES (?, 'Yes', 'Yes', ?, ?, ?, ?, ?, NOW(), NOW())
+  ";
 
-  $result = mysqli_query($con, $sql);
+  $stmt = mysqli_prepare($con, $query);
+
+  // Bind parameters
+  mysqli_stmt_bind_param($stmt, "isssss", $user_data['id'], $latitude, $longitude, $latitude_check_out, $longitude_check_out, $remark);
+
+
+
+
+  // Execute the statement
+  $result = mysqli_stmt_execute($stmt);
+
+  // Handle success or failure
   if ($result) {
-    echo "<script> window.onload = function() { 
-    Swal.fire({
-      icon: 'success',
-      title: 'Daily Sales Recorded Successfully',
-      showConfirmButton: true,
-      confirmButtonText: 'OK',
-      timer: 2000
-    });
-  } </script>";
+    // Success
+    echo "<script>alert('Attendance recorded successfully!');</script>";
   } else {
-    echo "<script> window.onload = function() {
-    Swal.fire({
-      icon: 'error',
-      title: 'Failed to Recorded Daily Sales',
-      showConfirmButton: false,
-      showDenyButton: true,
-      denyButtonText: 'OK'
-    });
-  } </script>";
+    // Failure
+    echo "<script>alert('Failed to record attendance.');</script>";
   }
+
+  // Close the statement
+  mysqli_stmt_close($stmt);
 }

@@ -7,8 +7,8 @@ include("backend/insert.php");
 
 $user_data = check_login($con);
 
-?>
 
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -234,7 +234,7 @@ $user_data = check_login($con);
                             <input type="hidden" name="latitude_check_out" id="latitude_check_out">
                             <input type="hidden" name="longitude_check_out" id="longitude_check_out">
                             <td><input type="submit" name="present" id="present" value="Check In" onclick="getLocationAndSubmit(event, false)"></td>
-                            <td><input type="submit" name="check_out" id="check_out" value="Check Out" onclick="getLocationAndSubmit(event, true)"></td>
+
 
                             <td><input type="text" name="remark" id="remark"></td>
                         </tr>
@@ -243,6 +243,14 @@ $user_data = check_login($con);
                 <br>
             <?php endif; ?>
         </form>
+
+
+        <form method="post" enctype="multipart/form-data" onsubmit="getLocationAndSubmit(event)">
+            <td><input type="submit" name="check_out" id="check_out" value="Check Out" onclick="getLocationAndSubmit(event, true)"></td>
+        </form>
+
+
+
         <script src="js/sweetalert2.min.js"></script>
 
         <!--select box redirection -->
