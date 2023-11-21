@@ -87,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 <div id="box">
                     <form method="post">
                         <span class="login100-form-title">
-                            Admin Login
+                            Login Page
                         </span>
 
                         <div class="wrap-input100">
