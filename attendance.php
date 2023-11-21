@@ -13,8 +13,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $remark = isset($_POST['remark']) ? $_POST['remark'] : '';
 
     // Use prepared statement to avoid SQL injection
-    $query = "INSERT INTO attendance_sheet (user_id, present, absent, location, latitude, longitude, remark, attendance_time)
-            VALUES (?, 'Yes', '', '', ?, ?, ?, NOW())";
+    $query = "INSERT INTO attendance_sheet (user_id, present, latitude, longitude, remark, attendance_time)
+            VALUES (?,'Yes', ?, ?, ?, NOW())";
 
     $stmt = mysqli_prepare($con, $query);
 
