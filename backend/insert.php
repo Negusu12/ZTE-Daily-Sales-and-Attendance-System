@@ -1,7 +1,6 @@
 <?php
 
 include('connect.php');
-$user_data = check_login($con);
 
 if (isset($_POST['submit'])) {
 
@@ -59,42 +58,4 @@ if (isset($_POST['submit'])) {
       });
     } </script>";
   }
-}
-
-
-if ($_SERVER['REQUEST_METHOD'] == "POST") {
-  // Get other form data
-  $latitude = isset($_POST['latitude']) ? $_POST['latitude'] : null;
-  $longitude = isset($_POST['longitude']) ? $_POST['longitude'] : null;
-  $latitude_check_out = isset($_POST['latitude_check_out']) ? $_POST['latitude_check_out'] : null;
-  $longitude_check_out = isset($_POST['longitude_check_out']) ? $_POST['longitude_check_out'] : null;
-  $remark = isset($_POST['remark']) ? $_POST['remark'] : '';
-
-  // Use prepared statement to avoid SQL injection
-  $query = "INSERT INTO attendance_sheet (user_id, present, check_out, latitude, longitude, latitude_check_out, longitude_check_out, remark, attendance_time, check_out_time)
-  VALUES (?, 'Yes', 'Yes', ?, ?, ?, ?, ?, NOW(), NOW())
-  ";
-
-  $stmt = mysqli_prepare($con, $query);
-
-  // Bind parameters
-  mysqli_stmt_bind_param($stmt, "isssss", $user_data['id'], $latitude, $longitude, $latitude_check_out, $longitude_check_out, $remark);
-
-
-
-
-  // Execute the statement
-  $result = mysqli_stmt_execute($stmt);
-
-  // Handle success or failure
-  if ($result) {
-    // Success
-    echo "<script>alert('Attendance recorded successfully!');</script>";
-  } else {
-    // Failure
-    echo "<script>alert('Failed to record attendance.');</script>";
-  }
-
-  // Close the statement
-  mysqli_stmt_close($stmt);
 }
