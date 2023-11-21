@@ -7,41 +7,44 @@ include("backend/insert.php");
 
 $user_data = check_login($con);
 
-if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    // Get other form data
-    $latitude = isset($_POST['latitude']) ? $_POST['latitude'] : null;
-    $longitude = isset($_POST['longitude']) ? $_POST['longitude'] : null;
-    $latitude_check_out = isset($_POST['latitude_check_out']) ? $_POST['latitude_check_out'] : null;
-    $longitude_check_out = isset($_POST['longitude_check_out']) ? $_POST['longitude_check_out'] : null;
-    $remark = isset($_POST['remark']) ? $_POST['remark'] : '';
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST['check_in'])) {
+        // Retrieve data from the Check In form
+        $userID = $_POST['user_id'];
+        $checkIn = $_POST['check_in'];
+        $latitude = $_POST['latitude'];
+        $longitude = $_POST['longitude'];
+        $attendanceTime = $_POST['attendance_time'];
 
-    // Use prepared statement to avoid SQL injection
-    $query = "INSERT INTO attendance_sheet (user_id, present, check_out, latitude, longitude, latitude_check_out, longitude_check_out, remark, attendance_time, check_out_time)
-    VALUES (?, 'Yes', 'Yes', ?, ?, ?, ?, ?, NOW(), NOW())
-    ";
+        // Insert data into the "attendance" table
+        $sql = "INSERT INTO attendance_sheet (user_id, check_in, latitude, longitude, attendance_time) VALUES ('$userID', '$checkIn', '$latitude', '$longitude', '$attendanceTime')";
 
-    $stmt = mysqli_prepare($con, $query);
-
-    // Bind parameters
-    mysqli_stmt_bind_param($stmt, "isssss", $user_data['id'], $latitude, $longitude, $latitude_check_out, $longitude_check_out, $remark);
-
-
-
-
-    // Execute the statement
-    $result = mysqli_stmt_execute($stmt);
-
-    // Handle success or failure
-    if ($result) {
-        // Success
-        echo "<script>alert('Attendance recorded successfully!');</script>";
-    } else {
-        // Failure
-        echo "<script>alert('Failed to record attendance.');</script>";
+        if ($con->query($sql) === TRUE) {
+            echo "Record inserted successfully";
+        } else {
+            echo "Error: " . $sql . "<br>" . $con->error;
+        }
+        mysqli_close($con);
     }
 
-    // Close the statement
-    mysqli_stmt_close($stmt);
+    if (isset($_POST['check_out'])) {
+        // Handle check-out data
+        $userID = $_POST['user_id'];
+        $checkOut = $_POST['check_out'];
+        $latitudeCheckOut = $_POST['latitude_check_out'];
+        $longitudeCheckOut = $_POST['longitude_check_out'];
+        $checkOutTime = $_POST['check_out_time'];
+
+        // Insert data into the "attendance" table
+        $sql = "INSERT INTO attendance_sheet (user_id, check_out, latitude_check_out, longitude_check_out, check_out_time) VALUES ('$userID', '$checkOut', '$latitudeCheckOut', '$longitudeCheckOut', '$checkOutTime')";
+
+        if ($con->query($sql) === TRUE) {
+            echo "Record inserted successfully";
+        } else {
+            echo "Error: " . $sql . "<br>" . $con->error;
+        }
+        mysqli_close($con);
+    }
 }
 
 
@@ -213,6 +216,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 width: 100%;
                 /* Ensure the readonly input takes full width */
             }
+
+
         }
     </style>
 </head>
@@ -246,7 +251,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
         <div class="username"> Hello <?php echo $user_data['promoter_name']; ?>!</div>
 
-        <form method="post" enctype="multipart/form-data" onsubmit="getLocationAndSubmit(event)">
+        <form method="post" enctype="multipart/form-data" onsubmit="getLocationAndSubmit(event, false)">
             <div class="info">
                 <h1>Promoter's Name:</h1><input type="text" readonly name="promoter_name" value="<?php echo $user_data['promoter_name']; ?>"> <br>
                 <h1>Promoter's Phone Number:</h1><input type="text" readonly name="promoter_phone" value="<?php echo $user_data['promoter_phone']; ?>"><br>
@@ -266,11 +271,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                     <tbody>
                         <tr>
                             <td><?php echo date('F j'); ?></td>
+                            <input class="coon" type="text" name="user_id" id="user_id" value="<?php echo $user_data['id']; ?>">
                             <input type="hidden" name="latitude" id="latitude">
                             <input type="hidden" name="longitude" id="longitude">
-                            <input type="hidden" name="latitude_check_out" id="latitude_check_out">
-                            <input type="hidden" name="longitude_check_out" id="longitude_check_out">
-                            <td><input type="submit" name="present" id="present" value="Check In" onclick="getLocationAndSubmit(event, false)"></td>
+                            <input class="coon" type="text" name="check_in" value="Yes">
+                            <input class="coon" type="datetime-local" name="attendance_time" id="attendance_time">
+
+                            <input type="submit" name="check_in" id="check_in" value="Check In">
 
 
                             <td><input type="text" name="remark" id="remark"></td>
@@ -282,9 +289,47 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         </form>
 
 
-        <form method="post" enctype="multipart/form-data" onsubmit="getLocationAndSubmit(event)">
-            <td><input type="submit" name="check_out" id="check_out" value="Check Out" onclick="getLocationAndSubmit(event, true)"></td>
+
+
+
+        <form method="post" enctype="multipart/form-data" onsubmit="getLocationAndSubmit(event, true)">
+            <div class="info coon">
+                <h1>Promoter's Name:</h1><input type="text" readonly name="promoter_name" value="<?php echo $user_data['promoter_name']; ?>"> <br>
+                <h1>Promoter's Phone Number:</h1><input type="text" readonly name="promoter_phone" value="<?php echo $user_data['promoter_phone']; ?>"><br>
+                <h1>Name of the Shop</h1><input type="text" readonly name="shop" value="<?php echo $user_data['shop']; ?>"><br>
+                <h1>Shop level (Circle One): Grand/Premium/Higher</h1><br>
+            </div>
+            <?php if ($user_data['role'] == 2) : ?>
+                <table>
+                    <thead class="coon">
+                        <tr>
+                            <th>Date</th>
+                            <th>Check In</th>
+                            <th>Check Out</th>
+                            <th>Remark</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><?php echo date('F j'); ?></td>
+                            <input class="coon" type="text" name="user_id" id="user_id" value="<?php echo $user_data['id']; ?>">
+                            <input type="hidden" name="latitude_check_out" id="latitude_check_out">
+                            <input type="hidden" name="longitude_check_out" id="longitude_check_out">
+                            <input class="coon" type="text" name="check_out" value="Yes">
+                            <input class="coon" type="datetime-local" name="check_out_time" id="check_out_time">
+
+                            <input type="submit" name="check_out" id="check_out" value="Check Out">
+
+
+                            <td><input type="text" name="remark" id="remark"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br>
+            <?php endif; ?>
         </form>
+
+
 
 
 
@@ -325,7 +370,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                             document.getElementById("longitude").value = position.coords.longitude;
                         }
 
-                        document.forms[0].submit();
+                        // Submit the form with the correct index
+                        document.forms[isCheckOut ? 1 : 0].submit();
                     }, function(error) {
                         alert("Error getting location: " + error.message);
                     });
@@ -333,6 +379,22 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                     alert("Geolocation is not supported by this browser.");
                 }
             }
+        </script>
+        <script>
+            const currentDate = new Date();
+            const year = currentDate.getFullYear();
+            const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+            const day = currentDate.getDate().toString().padStart(2, '0');
+            const hours = currentDate.getHours().toString().padStart(2, '0');
+            const minutes = currentDate.getMinutes().toString().padStart(2, '0');
+
+            const currentDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+
+            // Set the value of the input with ID "check_out_time" to the current date and time
+            document.getElementById("check_out_time").value = currentDateTime;
+
+            // Set the value of the input with ID "attendance_time" to the current date and time
+            document.getElementById("attendance_time").value = currentDateTime;
         </script>
     </div>
 </body>
