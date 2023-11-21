@@ -15,9 +15,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $latitude = $_POST['latitude'];
         $longitude = $_POST['longitude'];
         $attendanceTime = $_POST['attendance_time'];
+        $remark = $_POST['remark'];
 
         // Insert data into the "attendance" table
-        $sql = "INSERT INTO attendance_sheet (user_id, check_in, latitude, longitude, attendance_time) VALUES ('$userID', '$checkIn', '$latitude', '$longitude', '$attendanceTime')";
+        $sql = "INSERT INTO attendance_sheet (user_id, check_in, latitude, longitude, attendance_time, remark) VALUES ('$userID', '$checkIn', '$latitude', '$longitude', '$attendanceTime', '$remark')";
 
         if ($con->query($sql) === TRUE) {
             echo "Record inserted successfully";
@@ -34,9 +35,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $latitudeCheckOut = $_POST['latitude_check_out'];
         $longitudeCheckOut = $_POST['longitude_check_out'];
         $checkOutTime = $_POST['check_out_time'];
+        $remark = $_POST['remark'];
 
         // Insert data into the "attendance" table
-        $sql = "INSERT INTO attendance_sheet (user_id, check_out, latitude_check_out, longitude_check_out, check_out_time) VALUES ('$userID', '$checkOut', '$latitudeCheckOut', '$longitudeCheckOut', '$checkOutTime')";
+        $sql = "INSERT INTO attendance_sheet (user_id, check_out, latitude_check_out, longitude_check_out, check_out_time, remark) VALUES ('$userID', '$checkOut', '$latitudeCheckOut', '$longitudeCheckOut', '$checkOutTime', '$remark')";
 
         if ($con->query($sql) === TRUE) {
             echo "Record inserted successfully";
@@ -262,15 +264,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <table>
                     <thead>
                         <tr>
-                            <th>Date</th>
-                            <th>Check In</th>
-                            <th>Check Out</th>
+                            <th class="coon">Date</th>
+                            <th class="coon">Check In</th>
+                            <th class="coon">Check Out</th>
                             <th>Remark</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td><?php echo date('F j'); ?></td>
+                            <td class="coon"><?php echo date('F j'); ?></td>
                             <input class="coon" type="text" name="user_id" id="user_id" value="<?php echo $user_data['id']; ?>">
                             <input type="hidden" name="latitude" id="latitude">
                             <input type="hidden" name="longitude" id="longitude">
@@ -301,17 +303,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <?php if ($user_data['role'] == 2) : ?>
                 <table>
-                    <thead class="coon">
+                    <thead>
                         <tr>
-                            <th>Date</th>
-                            <th>Check In</th>
-                            <th>Check Out</th>
-                            <th>Remark</th>
+                            <th class="coon">Date</th>
+                            <th class="coon">Check In</th>
+                            <th class="coon">Check Out</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td><?php echo date('F j'); ?></td>
+                            <td class="coon"><?php echo date('F j'); ?></td>
                             <input class="coon" type="text" name="user_id" id="user_id" value="<?php echo $user_data['id']; ?>">
                             <input type="hidden" name="latitude_check_out" id="latitude_check_out">
                             <input type="hidden" name="longitude_check_out" id="longitude_check_out">
