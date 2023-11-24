@@ -59,19 +59,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
         if ($sql->execute()) {
-            echo "Record inserted successfully";
+            echo "<script>
+                window.onload = function() {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Checked In Successfully',
+                        showConfirmButton: true,
+                        confirmButtonText: 'OK',
+                        timer: 2000
+                    }).then(function() {
+                        window.location.href = 'attendance.php';
+                    });
+                }
+            </script>";
         } else {
-            echo "Error: " . $sql->error;
+            echo "<script>
+                window.onload = function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Failed to Check In',
+                        showConfirmButton: false,
+                        showDenyButton: true,
+                        denyButtonText: 'OK'
+                    });
+                }
+            </script>";
         }
-
-        $sql->close();
-
-        // Set a cookie to indicate that the user has checked in for the day
-        setcookie('check_in_' . $user_data['id'], '1', strtotime('tomorrow'));
-
-        // Redirect to a different page after form submission
-        header("Location: attendance.php");
-        exit();
     }
 
     if (isset($_POST['check_out']) && !$checkOutDisabled) {
@@ -85,19 +98,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $sql->bind_param("issss", $userID, $checkOut, $latitudeCheckOut, $longitudeCheckOut, $remark);
 
         if ($sql->execute()) {
-            echo "Record inserted successfully";
+            echo "<script>
+                window.onload = function() {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Checked Out Successfully',
+                        showConfirmButton: true,
+                        confirmButtonText: 'OK',
+                        timer: 2000
+                    }).then(function() {
+                        window.location.href = 'attendance.php';
+                    });
+                }
+            </script>";
         } else {
-            echo "Error: " . $sql->error;
+            echo "<script>
+                window.onload = function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Failed to Check Out',
+                        showConfirmButton: false,
+                        showDenyButton: true,
+                        denyButtonText: 'OK'
+                    });
+                }
+            </script>";
         }
-
-        $sql->close();
-
-        // Set a cookie to indicate that the user has checked out for the day
-        setcookie('check_out_' . $user_data['id'], '1', strtotime('tomorrow'));
-
-        // Redirect to a different page after form submission
-        header("Location: attendance.php");
-        exit();
     }
 }
 ?>
@@ -268,8 +294,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 width: 100%;
                 /* Ensure the readonly input takes full width */
             }
+        }
 
-
+        .hidden-form {
+            display: none;
         }
     </style>
 </head>
@@ -331,7 +359,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <input type="submit" name="check_in" id="check_in" value="Check In">
 
 
-                            <td><input type="text" name="remark" id="remark"></td>
+                            <?php if (!$checkInDisabled) : ?>
+                                <h1>Remark:</h1><input type="text" name="remark" id="remark">
+                            <?php endif; ?>
                         </tr>
                     </tbody>
                 </table>
@@ -343,7 +373,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 
-        <form method="post" enctype="multipart/form-data" onsubmit="getLocationAndSubmit(event, true)">
+        <form class="hidden-form" method="post" enctype="multipart/form-data" onsubmit="getLocationAndSubmit(event, true)">
             <div class="info coon">
                 <h1>Promoter's Name:</h1><input type="text" readonly name="promoter_name" value="<?php echo $user_data['promoter_name']; ?>"> <br>
                 <h1>Promoter's Phone Number:</h1><input type="text" readonly name="promoter_phone" value="<?php echo $user_data['promoter_phone']; ?>"><br>
@@ -370,7 +400,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <input type="submit" name="check_out" id="check_out" value="Check Out">
 
 
-                            <td><input type="text" name="remark" id="remark"></td>
+                            <?php if (!$checkOutDisabled) : ?>
+                                <h1>Remark:</h1><input type="text" name="remark" id="remark">
+                            <?php endif; ?>
                         </tr>
                     </tbody>
                 </table>
@@ -433,10 +465,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             document.addEventListener("DOMContentLoaded", function() {
                 const checkInButton = document.getElementById("check_in");
                 const checkOutButton = document.getElementById("check_out");
+                const secondForm = document.querySelector(".hidden-form");
 
                 <?php if ($checkInDisabled) : ?>
                     checkInButton.disabled = true;
                     checkInButton.value = "Already Checked In";
+                    checkInButton.style.backgroundColor = "#4CAF50"; // Green color
+                    checkInButton.style.color = "#FFFFFF"; // White text color
+                    secondForm.style.display = "block"; // Show the second form
                 <?php else : ?>
                     const attendanceTimeInput = document.getElementById("attendance_time");
                     attendanceTimeInput.value = getCurrentDateTime();
@@ -445,21 +481,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <?php if ($checkOutDisabled) : ?>
                     checkOutButton.disabled = true;
                     checkOutButton.value = "Already Checked Out";
+                    checkOutButton.style.backgroundColor = "#4CAF50"; // Green color
+                    checkOutButton.style.color = "#FFFFFF"; // White text color
                 <?php else : ?>
                     const checkOutTimeInput = document.getElementById("check_out_time");
                     checkOutTimeInput.value = getCurrentDateTime();
                 <?php endif; ?>
 
-                function getCurrentDateTime() {
-                    const currentDate = new Date();
-                    const year = currentDate.getFullYear();
-                    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-                    const day = currentDate.getDate().toString().padStart(2, '0');
-                    const hours = currentDate.getHours().toString().padStart(2, '0');
-                    const minutes = currentDate.getMinutes().toString().padStart(2, '0');
-
-                    return `${year}-${month}-${day}T${hours}:${minutes}`;
-                }
             });
         </script>
     </div>
