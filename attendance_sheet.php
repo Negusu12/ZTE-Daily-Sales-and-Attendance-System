@@ -81,7 +81,7 @@ if ($user_data['role'] == 2) {
         <option value="3">Users</option>
     </select>
     <?php {
-        $result = mysqli_query($con, "SELECT * FROM present_users_view");
+        $result = mysqli_query($con, "SELECT * FROM combined_attendance_view");
     ?>
 
         <section class="tbl-header table-responsive">
@@ -93,14 +93,15 @@ if ($user_data['role'] == 2) {
                             <th>Sl_No</th>
                             <th>promoter_name</th>
                             <th>Shop</th>
+                            <th>Date</th>
                             <th>Check In</th>
                             <th>Check In time</th>
+                            <th>Check in Remark</th>
                             <th>Check In Location</th>
                             <th>Check Out</th>
                             <th>Check Out time</th>
+                            <th> Check Out remark</th>
                             <th>Check Out Location</th>
-                            <th>remark</th>
-                            <th>Attendance Date</th>
 
 
                         </tr>
@@ -116,8 +117,10 @@ if ($user_data['role'] == 2) {
                             echo "<td>" . $rowCounter . "</td>"; // Display the counter value
                             echo "<td>" . $row['promoter_name'] . "</td>";
                             echo "<td>" . $row['shop'] . "</td>";
+                            echo "<td>" . $row['date'] . "</td>";
                             echo "<td>" . $row['check_in'] . "</td>";
                             echo "<td>" . $row['attendance_time'] . "</td>";
+                            echo "<td>" . $row['remark_check_in'] . "</td>";
                             if (!empty($row['latitude']) && !empty($row['longitude'])) {
                                 // Convert latitude and longitude to a Google Maps link
                                 $mapsLink = "https://www.google.com/maps?q=" . $row['latitude'] . "," . $row['longitude'];
@@ -127,6 +130,7 @@ if ($user_data['role'] == 2) {
                             }
                             echo "<td>" . $row['check_out'] . "</td>";
                             echo "<td>" . $row['check_out_time'] . "</td>";
+                            echo "<td>" . $row['remark_check_out'] . "</td>";
                             if (!empty($row['latitude_check_out']) && !empty($row['longitude_check_out'])) {
                                 // Convert latitude and longitude to a Google Maps link
                                 $mapsLink = "https://www.google.com/maps?q=" . $row['latitude_check_out'] . "," . $row['longitude_check_out'];
@@ -134,8 +138,7 @@ if ($user_data['role'] == 2) {
                             } else {
                                 echo "<td></td>"; // Display an empty cell if latitude or longitude is empty
                             }
-                            echo "<td>" . $row['remark'] . "</td>";
-                            echo "<td>" . $row['attendance_date'] . "</td>";
+
 
 
 

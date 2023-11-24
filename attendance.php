@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 session_start();
 
 include("connect.php");
@@ -7,49 +10,96 @@ include("backend/insert.php");
 
 $user_data = check_login($con);
 
+// Check if the user has already checked in or checked out today
+$checkInDisabled = hasCheckInToday($con, $user_data['id']);
+$checkOutDisabled = hasCheckOutToday($con, $user_data['id']);
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST['check_in'])) {
-        // Retrieve data from the Check In form
-        $userID = $_POST['user_id'];
+    // ... (rest of your existing code)
+}
+
+// Function to check if the user has already checked in today
+function hasCheckInToday($con, $userID)
+{
+    $today = date('Y-m-d');
+    $sql = $con->prepare("SELECT id FROM check_in WHERE user_id = ? AND DATE(attendance_time) = ?");
+    $sql->bind_param("is", $userID, $today);
+    $sql->execute();
+    $sql->store_result();
+    $rowCount = $sql->num_rows;
+    $sql->close();
+
+    return $rowCount > 0;
+}
+
+// Function to check if the user has already checked out today
+function hasCheckOutToday($con, $userID)
+{
+    $today = date('Y-m-d');
+    $sql = $con->prepare("SELECT id FROM check_out WHERE user_id = ? AND DATE(check_out_time) = ?");
+    $sql->bind_param("is", $userID, $today);
+    $sql->execute();
+    $sql->store_result();
+    $rowCount = $sql->num_rows;
+    $sql->close();
+
+    return $rowCount > 0;
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST['check_in']) && !$checkInDisabled) {
+        $userID = $user_data['id'];
         $checkIn = $_POST['check_in'];
         $latitude = $_POST['latitude'];
         $longitude = $_POST['longitude'];
-        $attendanceTime = $_POST['attendance_time'];
         $remark = $_POST['remark'];
 
-        // Insert data into the "attendance" table
-        $sql = "INSERT INTO attendance_sheet (user_id, check_in, latitude, longitude, attendance_time, remark) VALUES ('$userID', '$checkIn', '$latitude', '$longitude', '$attendanceTime', '$remark')";
+        $sql = $con->prepare("INSERT INTO check_in (user_id, check_in, latitude, longitude, remark) VALUES (?, ?, ?, ?, ?)");
+        $sql->bind_param("issss", $userID, $checkIn, $latitude, $longitude, $remark);
 
-        if ($con->query($sql) === TRUE) {
+
+        if ($sql->execute()) {
             echo "Record inserted successfully";
         } else {
-            echo "Error: " . $sql . "<br>" . $con->error;
+            echo "Error: " . $sql->error;
         }
-        mysqli_close($con);
+
+        $sql->close();
+
+        // Set a cookie to indicate that the user has checked in for the day
+        setcookie('check_in_' . $user_data['id'], '1', strtotime('tomorrow'));
+
+        // Redirect to a different page after form submission
+        header("Location: attendance.php");
+        exit();
     }
 
-    if (isset($_POST['check_out'])) {
-        // Handle check-out data
-        $userID = $_POST['user_id'];
+    if (isset($_POST['check_out']) && !$checkOutDisabled) {
+        $userID = $user_data['id'];
         $checkOut = $_POST['check_out'];
         $latitudeCheckOut = $_POST['latitude_check_out'];
         $longitudeCheckOut = $_POST['longitude_check_out'];
-        $checkOutTime = $_POST['check_out_time'];
         $remark = $_POST['remark'];
 
-        // Insert data into the "attendance" table
-        $sql = "INSERT INTO attendance_sheet (user_id, check_out, latitude_check_out, longitude_check_out, check_out_time, remark) VALUES ('$userID', '$checkOut', '$latitudeCheckOut', '$longitudeCheckOut', '$checkOutTime', '$remark')";
+        $sql = $con->prepare("INSERT INTO check_out (user_id, check_out, latitude_check_out, longitude_check_out, remark) VALUES (?, ?, ?, ?, ?)");
+        $sql->bind_param("issss", $userID, $checkOut, $latitudeCheckOut, $longitudeCheckOut, $remark);
 
-        if ($con->query($sql) === TRUE) {
+        if ($sql->execute()) {
             echo "Record inserted successfully";
         } else {
-            echo "Error: " . $sql . "<br>" . $con->error;
+            echo "Error: " . $sql->error;
         }
-        mysqli_close($con);
+
+        $sql->close();
+
+        // Set a cookie to indicate that the user has checked out for the day
+        setcookie('check_out_' . $user_data['id'], '1', strtotime('tomorrow'));
+
+        // Redirect to a different page after form submission
+        header("Location: attendance.php");
+        exit();
     }
 }
-
-
 ?>
 
 <!DOCTYPE html>
@@ -277,7 +327,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <input type="hidden" name="latitude" id="latitude">
                             <input type="hidden" name="longitude" id="longitude">
                             <input class="coon" type="text" name="check_in" value="Yes">
-                            <input class="coon" type="datetime-local" name="attendance_time" id="attendance_time">
 
                             <input type="submit" name="check_in" id="check_in" value="Check In">
 
@@ -317,7 +366,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <input type="hidden" name="latitude_check_out" id="latitude_check_out">
                             <input type="hidden" name="longitude_check_out" id="longitude_check_out">
                             <input class="coon" type="text" name="check_out" value="Yes">
-                            <input class="coon" type="datetime-local" name="check_out_time" id="check_out_time">
 
                             <input type="submit" name="check_out" id="check_out" value="Check Out">
 
@@ -382,20 +430,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         </script>
         <script>
-            const currentDate = new Date();
-            const year = currentDate.getFullYear();
-            const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-            const day = currentDate.getDate().toString().padStart(2, '0');
-            const hours = currentDate.getHours().toString().padStart(2, '0');
-            const minutes = currentDate.getMinutes().toString().padStart(2, '0');
+            document.addEventListener("DOMContentLoaded", function() {
+                const checkInButton = document.getElementById("check_in");
+                const checkOutButton = document.getElementById("check_out");
 
-            const currentDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+                <?php if ($checkInDisabled) : ?>
+                    checkInButton.disabled = true;
+                    checkInButton.value = "Already Checked In";
+                <?php else : ?>
+                    const attendanceTimeInput = document.getElementById("attendance_time");
+                    attendanceTimeInput.value = getCurrentDateTime();
+                <?php endif; ?>
 
-            // Set the value of the input with ID "check_out_time" to the current date and time
-            document.getElementById("check_out_time").value = currentDateTime;
+                <?php if ($checkOutDisabled) : ?>
+                    checkOutButton.disabled = true;
+                    checkOutButton.value = "Already Checked Out";
+                <?php else : ?>
+                    const checkOutTimeInput = document.getElementById("check_out_time");
+                    checkOutTimeInput.value = getCurrentDateTime();
+                <?php endif; ?>
 
-            // Set the value of the input with ID "attendance_time" to the current date and time
-            document.getElementById("attendance_time").value = currentDateTime;
+                function getCurrentDateTime() {
+                    const currentDate = new Date();
+                    const year = currentDate.getFullYear();
+                    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+                    const day = currentDate.getDate().toString().padStart(2, '0');
+                    const hours = currentDate.getHours().toString().padStart(2, '0');
+                    const minutes = currentDate.getMinutes().toString().padStart(2, '0');
+
+                    return `${year}-${month}-${day}T${hours}:${minutes}`;
+                }
+            });
         </script>
     </div>
 </body>
