@@ -19,6 +19,7 @@ $user_data = check_login($con);
     <link rel="stylesheet" href="css/bootstrap/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="css/bootstrap/buttons.bootstrap4.min.css">
     <link rel="stylesheet" href="css/bootstrap/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="css/bootstrap/flatpickr.min.css">
     <link rel="stylesheet" href="css/admin.css">
 
     <style>
@@ -112,7 +113,7 @@ $user_data = check_login($con);
                             echo "<td>" . $row['apparatus_sold'] . "</td>";
                             echo "<td>" . $row['net_stock'] . "</td>";
                             echo "<td>" . $row['document_date'] . "</td>";
-                            echo "<td>" . $row['remark'] . "</td>";
+                            echo "<td>" . $row['remark_w'] . "</td>";
                             echo "</tr>";
                         }
                         ?>
@@ -142,6 +143,7 @@ $user_data = check_login($con);
     <script src="js/bootstrap/buttons.colVis.min.js"></script>
     <script src="js/bootstrap/dataTables.responsive.min.js"></script>
     <script src="js/bootstrap/buttons.bootstrap4.min.js"></script>
+    <script src="js/bootstrap/flatpickr.js"></script>
 
 
     <script>
@@ -168,13 +170,37 @@ $user_data = check_login($con);
             // Add a text input for each column in the header
             table.columns().every(function() {
                 var that = this;
+                var columnTitle = $(this.header()).text().trim();
 
-                // Create the text input element
-                var input = $('<input type="text" class="form-control" placeholder="Filter"/>')
-                    .appendTo($(this.header()))
-                    .on('keyup change', function() {
-                        that.search($(this).val()).draw();
+                // Create the input element based on the column title
+                var input;
+                if (columnTitle === 'Document Date') {
+                    // Create a date picker element
+                    input = $('<input type="text" class="form-control" placeholder="Filter"/>')
+                        .appendTo($(this.header()))
+                        .on('change', function() {
+                            that.search($(this).val()).draw();
+                        });
+
+                    // Initialize the date picker
+                    flatpickr(input[0], {
+                        dateFormat: 'Y-m-d',
+                        onChange: function(selectedDates) {
+                            if (selectedDates.length > 0) {
+                                var formattedDate = selectedDates[0].toISOString().split('T')[0];
+                                input.val(formattedDate);
+                                input.trigger('change');
+                            }
+                        }
                     });
+                } else {
+                    // Create a regular text input element for other columns
+                    input = $('<input type="text" class="form-control" placeholder="Filter"/>')
+                        .appendTo($(this.header()))
+                        .on('keyup change', function() {
+                            that.search($(this).val()).draw();
+                        });
+                }
             });
 
             table.buttons().container()
