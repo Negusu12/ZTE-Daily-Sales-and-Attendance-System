@@ -26,6 +26,7 @@ if ($user_data['role'] == 2) {
     <link rel="stylesheet" href="css/bootstrap/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="css/bootstrap/buttons.bootstrap4.min.css">
     <link rel="stylesheet" href="css/bootstrap/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="css/bootstrap/flatpickr.min.css">
     <link rel="stylesheet" href="css/admin.css">
     <link rel="stylesheet" href="css/sweetalert2.min.css">
 
@@ -63,6 +64,7 @@ if ($user_data['role'] == 2) {
             }
         }
     </style>
+
 </head>
 
 <body>
@@ -174,6 +176,7 @@ if ($user_data['role'] == 2) {
     <script src="js/bootstrap/buttons.colVis.min.js"></script>
     <script src="js/bootstrap/dataTables.responsive.min.js"></script>
     <script src="js/bootstrap/buttons.bootstrap4.min.js"></script>
+    <script src="js/bootstrap/flatpickr.js"></script>
 
 
     <script>
@@ -200,17 +203,42 @@ if ($user_data['role'] == 2) {
             // Add a text input for each column in the header
             table.columns().every(function() {
                 var that = this;
+                var columnTitle = $(this.header()).text().trim();
 
-                // Create the text input element
-                var input = $('<input type="text" class="form-control" placeholder="Filter"/>')
-                    .appendTo($(this.header()))
-                    .on('keyup change', function() {
-                        that.search($(this).val()).draw();
+                // Create the input element based on the column title
+                var input;
+                if (columnTitle === 'Date' || columnTitle === 'Check In time' || columnTitle === 'Check Out time') {
+                    // Create a date picker element
+                    input = $('<input type="text" class="form-control" placeholder="Filter"/>')
+                        .appendTo($(this.header()))
+                        .on('change', function() {
+                            that.search($(this).val()).draw();
+                        });
+
+                    // Initialize the date picker
+                    flatpickr(input[0], {
+                        dateFormat: 'Y-m-d',
+                        onChange: function(selectedDates) {
+                            if (selectedDates.length > 0) {
+                                var formattedDate = selectedDates[0].toISOString().split('T')[0];
+                                input.val(formattedDate);
+                                input.trigger('change');
+                            }
+                        }
                     });
+                } else {
+                    // Create a regular text input element for other columns
+                    input = $('<input type="text" class="form-control" placeholder="Filter"/>')
+                        .appendTo($(this.header()))
+                        .on('keyup change', function() {
+                            that.search($(this).val()).draw();
+                        });
+                }
             });
 
             table.buttons().container()
                 .appendTo('#mydatatable_wrapper .col-md-6:eq(0)');
+
         });
     </script>
     <!--select box redirection -->
@@ -233,25 +261,7 @@ if ($user_data['role'] == 2) {
         }
     </script>
     <!-- select box redirection end -->
-    <!-- Delete Confirmation -->
-    <script>
-        function confirmDelete(userId) {
-            Swal.fire({
-                title: 'Are you sure?',
-                text: 'You won\'t be able to revert this!',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Redirect to your delete script with the user ID
-                    window.location.href = 'delete.php?id=' + userId;
-                }
-            });
-        }
-    </script>
+
 
 </body>
 
