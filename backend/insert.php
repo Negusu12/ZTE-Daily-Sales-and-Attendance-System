@@ -38,24 +38,30 @@ if (isset($_POST['submit'])) {
   $result = mysqli_query($con, $sql);
 
   if ($result) {
-    echo "<script> window.onload = function() { 
-      Swal.fire({
-        icon: 'success',
-        title: 'Daily Sales Recorded Successfully',
-        showConfirmButton: true,
-        confirmButtonText: 'OK',
-        timer: 2000
-      });
-    } </script>";
+    echo "<script>
+        window.onload = function() {
+            Swal.fire({
+                icon: 'success',
+                title: 'Daily Sales Recorded Successfully',
+                showConfirmButton: true,
+                confirmButtonText: 'OK',
+                timer: 2000
+            }).then(function() {
+                window.location.href = 'index.php';
+            });
+        }
+    </script>";
   } else {
-    echo "<script> window.onload = function() {
-      Swal.fire({
-        icon: 'error',
-        title: 'Failed to Recorded Daily Sales',
-        showConfirmButton: false,
-        showDenyButton: true,
-        denyButtonText: 'OK'
-      });
-    } </script>";
+    echo "<script>
+        window.onload = function() {
+            Swal.fire({
+                icon: 'error',
+                title: 'Failed to Record Daily Sales',
+                showConfirmButton: false,
+                showDenyButton: true,
+                denyButtonText: 'OK'
+            });
+        }
+    </script>";
   }
 }

@@ -59,7 +59,7 @@ CREATE TABLE `check_in` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `check_in_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -81,7 +81,7 @@ CREATE TABLE `check_out` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `check_out_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -158,7 +158,7 @@ CREATE TABLE `daily_sales` (
   `mf286c_remark` varchar(255) DEFAULT NULL,
   `remark` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -173,6 +173,7 @@ SET @saved_cs_client     = @@character_set_client;
  1 AS `promoter_name`,
  1 AS `promoter_phone`,
  1 AS `shop`,
+ 1 AS `remark_w`,
  1 AS `model`,
  1 AS `available_stock`,
  1 AS `apparatus_sold`,
@@ -258,7 +259,7 @@ SET character_set_client = @saved_cs_client;
 /*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `daily_sales_view` AS select `daily_sales`.`promoter_name` AS `promoter_name`,`daily_sales`.`promoter_phone` AS `promoter_phone`,`daily_sales`.`shop` AS `shop`,'A33 CORE' AS `model`,`daily_sales`.`a33_core_available` AS `available_stock`,`daily_sales`.`a33_core_sold` AS `apparatus_sold`,`daily_sales`.`a33_core_left` AS `net_stock`,`daily_sales`.`doc_date` AS `document_date`,`daily_sales`.`a33_core_remark` AS `remark` from `daily_sales` union all select `daily_sales`.`promoter_name` AS `promoter_name`,`daily_sales`.`promoter_phone` AS `promoter_phone`,`daily_sales`.`shop` AS `shop`,'A31 Lite' AS `model`,`daily_sales`.`a31_lite_available` AS `available_stock`,`daily_sales`.`a31_lite_sold` AS `apparatus_sold`,`daily_sales`.`a31_lite_left` AS `net_stock`,`daily_sales`.`doc_date` AS `document_date`,`daily_sales`.`a31_lite_remark` AS `remark` from `daily_sales` union all select `daily_sales`.`promoter_name` AS `promoter_name`,`daily_sales`.`promoter_phone` AS `promoter_phone`,`daily_sales`.`shop` AS `shop`,'Blade A31' AS `model`,`daily_sales`.`blade_a31_available` AS `available_stock`,`daily_sales`.`blade_a31_sold` AS `apparatus_sold`,`daily_sales`.`blade_a31_left` AS `net_stock`,`daily_sales`.`doc_date` AS `document_date`,`daily_sales`.`blade_a31_remark` AS `remark` from `daily_sales` union all select `daily_sales`.`promoter_name` AS `promoter_name`,`daily_sales`.`promoter_phone` AS `promoter_phone`,`daily_sales`.`shop` AS `shop`,'Blade A51' AS `model`,`daily_sales`.`blade_a51_available` AS `available_stock`,`daily_sales`.`blade_a51_sold` AS `apparatus_sold`,`daily_sales`.`blade_a51_left` AS `net_stock`,`daily_sales`.`doc_date` AS `document_date`,`daily_sales`.`blade_a51_remark` AS `remark` from `daily_sales` union all select `daily_sales`.`promoter_name` AS `promoter_name`,`daily_sales`.`promoter_phone` AS `promoter_phone`,`daily_sales`.`shop` AS `shop`,'Blade A71' AS `model`,`daily_sales`.`blade_a71_available` AS `available_stock`,`daily_sales`.`blade_a71_sold` AS `apparatus_sold`,`daily_sales`.`blade_a71_left` AS `net_stock`,`daily_sales`.`doc_date` AS `document_date`,`daily_sales`.`blade_a71_remark` AS `remark` from `daily_sales` union all select `daily_sales`.`promoter_name` AS `promoter_name`,`daily_sales`.`promoter_phone` AS `promoter_phone`,`daily_sales`.`shop` AS `shop`,'Blade V30' AS `model`,`daily_sales`.`blade_v30_available` AS `available_stock`,`daily_sales`.`blade_v30_sold` AS `apparatus_sold`,`daily_sales`.`blade_v30_left` AS `net_stock`,`daily_sales`.`doc_date` AS `document_date`,`daily_sales`.`blade_v30_remark` AS `remark` from `daily_sales` union all select `daily_sales`.`promoter_name` AS `promoter_name`,`daily_sales`.`promoter_phone` AS `promoter_phone`,`daily_sales`.`shop` AS `shop`,'MF971L' AS `model`,`daily_sales`.`mf971L_available` AS `available_stock`,`daily_sales`.`mf971L_sold` AS `apparatus_sold`,`daily_sales`.`mf971L_left` AS `net_stock`,`daily_sales`.`doc_date` AS `document_date`,`daily_sales`.`mf971L_remark` AS `remark` from `daily_sales` union all select `daily_sales`.`promoter_name` AS `promoter_name`,`daily_sales`.`promoter_phone` AS `promoter_phone`,`daily_sales`.`shop` AS `shop`,'MF286C' AS `model`,`daily_sales`.`mf286c_available` AS `available_stock`,`daily_sales`.`mf286c_sold` AS `apparatus_sold`,`daily_sales`.`mf286c_left` AS `net_stock`,`daily_sales`.`doc_date` AS `document_date`,`daily_sales`.`mf286c_remark` AS `remark` from `daily_sales` */;
+/*!50001 VIEW `daily_sales_view` AS select `daily_sales`.`promoter_name` AS `promoter_name`,`daily_sales`.`promoter_phone` AS `promoter_phone`,`daily_sales`.`shop` AS `shop`,`daily_sales`.`remark` AS `remark_w`,'A33 CORE' AS `model`,`daily_sales`.`a33_core_available` AS `available_stock`,`daily_sales`.`a33_core_sold` AS `apparatus_sold`,`daily_sales`.`a33_core_left` AS `net_stock`,`daily_sales`.`doc_date` AS `document_date`,`daily_sales`.`a33_core_remark` AS `remark` from `daily_sales` union all select `daily_sales`.`promoter_name` AS `promoter_name`,`daily_sales`.`promoter_phone` AS `promoter_phone`,`daily_sales`.`shop` AS `shop`,`daily_sales`.`remark` AS `remark_w`,'A31 Lite' AS `model`,`daily_sales`.`a31_lite_available` AS `available_stock`,`daily_sales`.`a31_lite_sold` AS `apparatus_sold`,`daily_sales`.`a31_lite_left` AS `net_stock`,`daily_sales`.`doc_date` AS `document_date`,`daily_sales`.`a31_lite_remark` AS `remark` from `daily_sales` union all select `daily_sales`.`promoter_name` AS `promoter_name`,`daily_sales`.`promoter_phone` AS `promoter_phone`,`daily_sales`.`shop` AS `shop`,`daily_sales`.`remark` AS `remark_w`,'Blade A31' AS `model`,`daily_sales`.`blade_a31_available` AS `available_stock`,`daily_sales`.`blade_a31_sold` AS `apparatus_sold`,`daily_sales`.`blade_a31_left` AS `net_stock`,`daily_sales`.`doc_date` AS `document_date`,`daily_sales`.`blade_a31_remark` AS `remark` from `daily_sales` union all select `daily_sales`.`promoter_name` AS `promoter_name`,`daily_sales`.`promoter_phone` AS `promoter_phone`,`daily_sales`.`shop` AS `shop`,`daily_sales`.`remark` AS `remark_w`,'Blade A51' AS `model`,`daily_sales`.`blade_a51_available` AS `available_stock`,`daily_sales`.`blade_a51_sold` AS `apparatus_sold`,`daily_sales`.`blade_a51_left` AS `net_stock`,`daily_sales`.`doc_date` AS `document_date`,`daily_sales`.`blade_a51_remark` AS `remark` from `daily_sales` union all select `daily_sales`.`promoter_name` AS `promoter_name`,`daily_sales`.`promoter_phone` AS `promoter_phone`,`daily_sales`.`shop` AS `shop`,`daily_sales`.`remark` AS `remark_w`,'Blade A71' AS `model`,`daily_sales`.`blade_a71_available` AS `available_stock`,`daily_sales`.`blade_a71_sold` AS `apparatus_sold`,`daily_sales`.`blade_a71_left` AS `net_stock`,`daily_sales`.`doc_date` AS `document_date`,`daily_sales`.`blade_a71_remark` AS `remark` from `daily_sales` union all select `daily_sales`.`promoter_name` AS `promoter_name`,`daily_sales`.`promoter_phone` AS `promoter_phone`,`daily_sales`.`shop` AS `shop`,`daily_sales`.`remark` AS `remark_w`,'Blade V30' AS `model`,`daily_sales`.`blade_v30_available` AS `available_stock`,`daily_sales`.`blade_v30_sold` AS `apparatus_sold`,`daily_sales`.`blade_v30_left` AS `net_stock`,`daily_sales`.`doc_date` AS `document_date`,`daily_sales`.`blade_v30_remark` AS `remark` from `daily_sales` union all select `daily_sales`.`promoter_name` AS `promoter_name`,`daily_sales`.`promoter_phone` AS `promoter_phone`,`daily_sales`.`shop` AS `shop`,`daily_sales`.`remark` AS `remark_w`,'MF971L' AS `model`,`daily_sales`.`mf971L_available` AS `available_stock`,`daily_sales`.`mf971L_sold` AS `apparatus_sold`,`daily_sales`.`mf971L_left` AS `net_stock`,`daily_sales`.`doc_date` AS `document_date`,`daily_sales`.`mf971L_remark` AS `remark` from `daily_sales` union all select `daily_sales`.`promoter_name` AS `promoter_name`,`daily_sales`.`promoter_phone` AS `promoter_phone`,`daily_sales`.`shop` AS `shop`,`daily_sales`.`remark` AS `remark_w`,'MF286C' AS `model`,`daily_sales`.`mf286c_available` AS `available_stock`,`daily_sales`.`mf286c_sold` AS `apparatus_sold`,`daily_sales`.`mf286c_left` AS `net_stock`,`daily_sales`.`doc_date` AS `document_date`,`daily_sales`.`mf286c_remark` AS `remark` from `daily_sales` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -290,4 +291,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-11-24 11:32:46
+-- Dump completed on 2023-11-25  4:12:13
