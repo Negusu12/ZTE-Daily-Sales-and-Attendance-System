@@ -26,6 +26,7 @@ if ($user_data['role'] == 2) {
     <link rel="stylesheet" href="css/bootstrap/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="css/bootstrap/buttons.bootstrap4.min.css">
     <link rel="stylesheet" href="css/bootstrap/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="css/bootstrap/flatpickr.min.css">
     <link rel="stylesheet" href="css/admin.css">
     <link rel="stylesheet" href="css/sweetalert2.min.css">
 
@@ -63,6 +64,7 @@ if ($user_data['role'] == 2) {
             }
         }
     </style>
+
 </head>
 
 <body>
@@ -81,7 +83,7 @@ if ($user_data['role'] == 2) {
         <option value="3">Users</option>
     </select>
     <?php {
-        $result = mysqli_query($con, "SELECT * FROM present_users_view");
+        $result = mysqli_query($con, "SELECT * FROM combined_attendance_view");
     ?>
 
         <section class="tbl-header table-responsive">
@@ -92,11 +94,16 @@ if ($user_data['role'] == 2) {
                         <tr>
                             <th>Sl_No</th>
                             <th>promoter_name</th>
-                            <th>present</th>
-                            <th>Location</th>
-                            <th>remark</th>
-                            <th>attendance_time</th>
-                            <th>attendance_Date</th>
+                            <th>Shop</th>
+                            <th>Date</th>
+                            <th>Check In</th>
+                            <th>Check In time</th>
+                            <th>Check in Remark</th>
+                            <th>Check In Location</th>
+                            <th>Check Out</th>
+                            <th>Check Out time</th>
+                            <th> Check Out remark</th>
+                            <th>Check Out Location</th>
 
 
                         </tr>
@@ -111,17 +118,29 @@ if ($user_data['role'] == 2) {
                             echo "<tr>";
                             echo "<td>" . $rowCounter . "</td>"; // Display the counter value
                             echo "<td>" . $row['promoter_name'] . "</td>";
-                            echo "<td>" . $row['present'] . "</td>";
+                            echo "<td>" . $row['shop'] . "</td>";
+                            echo "<td>" . $row['date'] . "</td>";
+                            echo "<td>" . $row['check_in'] . "</td>";
+                            echo "<td>" . $row['attendance_time'] . "</td>";
+                            echo "<td>" . $row['remark_check_in'] . "</td>";
                             if (!empty($row['latitude']) && !empty($row['longitude'])) {
                                 // Convert latitude and longitude to a Google Maps link
                                 $mapsLink = "https://www.google.com/maps?q=" . $row['latitude'] . "," . $row['longitude'];
-                                echo "<td><a href='$mapsLink' target='_blank'>View Location</a></td>";
+                                echo "<td><a href='$mapsLink' target='_blank'>Check In Location</a></td>";
                             } else {
                                 echo "<td></td>"; // Display an empty cell if latitude or longitude is empty
                             }
-                            echo "<td>" . $row['remark'] . "</td>";
-                            echo "<td>" . $row['attendance_time'] . "</td>";
-                            echo "<td>" . $row['attendance_date'] . "</td>";
+                            echo "<td>" . $row['check_out'] . "</td>";
+                            echo "<td>" . $row['check_out_time'] . "</td>";
+                            echo "<td>" . $row['remark_check_out'] . "</td>";
+                            if (!empty($row['latitude_check_out']) && !empty($row['longitude_check_out'])) {
+                                // Convert latitude and longitude to a Google Maps link
+                                $mapsLink = "https://www.google.com/maps?q=" . $row['latitude_check_out'] . "," . $row['longitude_check_out'];
+                                echo "<td><a href='$mapsLink' target='_blank'>Check Out Location</a></td>";
+                            } else {
+                                echo "<td></td>"; // Display an empty cell if latitude or longitude is empty
+                            }
+
 
 
 
@@ -157,6 +176,7 @@ if ($user_data['role'] == 2) {
     <script src="js/bootstrap/buttons.colVis.min.js"></script>
     <script src="js/bootstrap/dataTables.responsive.min.js"></script>
     <script src="js/bootstrap/buttons.bootstrap4.min.js"></script>
+    <script src="js/bootstrap/flatpickr.js"></script>
 
 
     <script>
@@ -183,17 +203,42 @@ if ($user_data['role'] == 2) {
             // Add a text input for each column in the header
             table.columns().every(function() {
                 var that = this;
+                var columnTitle = $(this.header()).text().trim();
 
-                // Create the text input element
-                var input = $('<input type="text" class="form-control" placeholder="Filter"/>')
-                    .appendTo($(this.header()))
-                    .on('keyup change', function() {
-                        that.search($(this).val()).draw();
+                // Create the input element based on the column title
+                var input;
+                if (columnTitle === 'Date' || columnTitle === 'Check In time' || columnTitle === 'Check Out time') {
+                    // Create a date picker element
+                    input = $('<input type="text" class="form-control" placeholder="Filter"/>')
+                        .appendTo($(this.header()))
+                        .on('change', function() {
+                            that.search($(this).val()).draw();
+                        });
+
+                    // Initialize the date picker
+                    flatpickr(input[0], {
+                        dateFormat: 'Y-m-d',
+                        onChange: function(selectedDates) {
+                            if (selectedDates.length > 0) {
+                                var formattedDate = selectedDates[0].toISOString().split('T')[0];
+                                input.val(formattedDate);
+                                input.trigger('change');
+                            }
+                        }
                     });
+                } else {
+                    // Create a regular text input element for other columns
+                    input = $('<input type="text" class="form-control" placeholder="Filter"/>')
+                        .appendTo($(this.header()))
+                        .on('keyup change', function() {
+                            that.search($(this).val()).draw();
+                        });
+                }
             });
 
             table.buttons().container()
                 .appendTo('#mydatatable_wrapper .col-md-6:eq(0)');
+
         });
     </script>
     <!--select box redirection -->
@@ -216,25 +261,7 @@ if ($user_data['role'] == 2) {
         }
     </script>
     <!-- select box redirection end -->
-    <!-- Delete Confirmation -->
-    <script>
-        function confirmDelete(userId) {
-            Swal.fire({
-                title: 'Are you sure?',
-                text: 'You won\'t be able to revert this!',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Redirect to your delete script with the user ID
-                    window.location.href = 'delete.php?id=' + userId;
-                }
-            });
-        }
-    </script>
+
 
 </body>
 

@@ -556,7 +556,11 @@ iframe {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #82defa;
+  background: #B2B435;
+  background: -webkit-linear-gradient(-135deg, #03949B, #26225B);
+  background: -o-linear-gradient(-135deg, #03949B, #26225B);
+  background: -moz-linear-gradient(-135deg, #03949B, #26225B);
+  background: linear-gradient(-135deg, #ffffff, #26225B);
   transition: opacity 0.75s, visibility 0.75s;
   z-index: 9999;
   /* Set a high z-index value */

@@ -4,47 +4,15 @@ ini_set('display_errors', 1);
 
 session_start();
 
-include("connect.php");
+include("connect.php"); // Replace with your database connection file
 include("functions.php");
-include("backend/insert.php");
+include("backend/insert.php"); // This include seems unnecessary, make sure it's needed
 
 $user_data = check_login($con);
 
 // Check if the user has already checked in or checked out today
-$checkInDisabled = hasCheckInToday($con, $user_data['id']);
-$checkOutDisabled = hasCheckOutToday($con, $user_data['id']);
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // ... (rest of your existing code)
-}
-
-// Function to check if the user has already checked in today
-function hasCheckInToday($con, $userID)
-{
-    $today = date('Y-m-d');
-    $sql = $con->prepare("SELECT id FROM check_in WHERE user_id = ? AND DATE(attendance_time) = ?");
-    $sql->bind_param("is", $userID, $today);
-    $sql->execute();
-    $sql->store_result();
-    $rowCount = $sql->num_rows;
-    $sql->close();
-
-    return $rowCount > 0;
-}
-
-// Function to check if the user has already checked out today
-function hasCheckOutToday($con, $userID)
-{
-    $today = date('Y-m-d');
-    $sql = $con->prepare("SELECT id FROM check_out WHERE user_id = ? AND DATE(check_out_time) = ?");
-    $sql->bind_param("is", $userID, $today);
-    $sql->execute();
-    $sql->store_result();
-    $rowCount = $sql->num_rows;
-    $sql->close();
-
-    return $rowCount > 0;
-}
+$checkInDisabled = isset($_COOKIE['check_in_' . $user_data['id']]);
+$checkOutDisabled = isset($_COOKIE['check_out_' . $user_data['id']]);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['check_in']) && !$checkInDisabled) {
@@ -52,39 +20,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $checkIn = $_POST['check_in'];
         $latitude = $_POST['latitude'];
         $longitude = $_POST['longitude'];
+        $attendanceTime = $_POST['attendance_time'];
         $remark = $_POST['remark'];
 
-        $sql = $con->prepare("INSERT INTO check_in (user_id, check_in, latitude, longitude, remark) VALUES (?, ?, ?, ?, ?)");
-        $sql->bind_param("issss", $userID, $checkIn, $latitude, $longitude, $remark);
-
+        $sql = $con->prepare("INSERT INTO attendance_sheet (user_id, check_in, latitude, longitude, attendance_time, remark) VALUES (?, ?, ?, ?, ?, ?)");
+        $sql->bind_param("isddss", $userID, $checkIn, $latitude, $longitude, $attendanceTime, $remark);
 
         if ($sql->execute()) {
-            echo "<script>
-                window.onload = function() {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Checked In Successfully',
-                        showConfirmButton: true,
-                        confirmButtonText: 'OK',
-                        timer: 2000
-                    }).then(function() {
-                        window.location.href = 'attendance.php';
-                    });
-                }
-            </script>";
+            echo "Record inserted successfully";
         } else {
-            echo "<script>
-                window.onload = function() {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Failed to Check In',
-                        showConfirmButton: false,
-                        showDenyButton: true,
-                        denyButtonText: 'OK'
-                    });
-                }
-            </script>";
+            echo "Error: " . $sql->error;
         }
+
+        $sql->close();
+
+        // Set a cookie to indicate that the user has checked in for the day
+        setcookie('check_in_' . $user_data['id'], '1', strtotime('tomorrow'));
+
+        // Redirect to a different page after form submission
+        header("Location: attendance.php");
+        exit();
     }
 
     if (isset($_POST['check_out']) && !$checkOutDisabled) {
@@ -92,38 +47,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $checkOut = $_POST['check_out'];
         $latitudeCheckOut = $_POST['latitude_check_out'];
         $longitudeCheckOut = $_POST['longitude_check_out'];
+        $checkOutTime = $_POST['check_out_time'];
         $remark = $_POST['remark'];
 
-        $sql = $con->prepare("INSERT INTO check_out (user_id, check_out, latitude_check_out, longitude_check_out, remark) VALUES (?, ?, ?, ?, ?)");
-        $sql->bind_param("issss", $userID, $checkOut, $latitudeCheckOut, $longitudeCheckOut, $remark);
+        $sql = $con->prepare("INSERT INTO check_out (user_id, check_out, latitude_check_out, longitude_check_out, check_out_time, remark) VALUES (?, ?, ?, ?, ?, ?)");
+        $sql->bind_param("isddss", $userID, $checkOut, $latitudeCheckOut, $longitudeCheckOut, $checkOutTime, $remark);
 
         if ($sql->execute()) {
-            echo "<script>
-                window.onload = function() {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Checked Out Successfully',
-                        showConfirmButton: true,
-                        confirmButtonText: 'OK',
-                        timer: 2000
-                    }).then(function() {
-                        window.location.href = 'attendance.php';
-                    });
-                }
-            </script>";
+            echo "Record inserted successfully";
         } else {
-            echo "<script>
-                window.onload = function() {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Failed to Check Out',
-                        showConfirmButton: false,
-                        showDenyButton: true,
-                        denyButtonText: 'OK'
-                    });
-                }
-            </script>";
+            echo "Error: " . $sql->error;
         }
+
+        $sql->close();
+
+        // Set a cookie to indicate that the user has checked out for the day
+        setcookie('check_out_' . $user_data['id'], '1', strtotime('tomorrow'));
+
+        // Redirect to a different page after form submission
+        header("Location: attendance.php");
+        exit();
     }
 }
 ?>
@@ -294,10 +237,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 width: 100%;
                 /* Ensure the readonly input takes full width */
             }
-        }
 
-        .hidden-form {
-            display: none;
+
         }
     </style>
 </head>
@@ -355,13 +296,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <input type="hidden" name="latitude" id="latitude">
                             <input type="hidden" name="longitude" id="longitude">
                             <input class="coon" type="text" name="check_in" value="Yes">
+                            <input class="coon" type="datetime-local" name="attendance_time" id="attendance_time">
 
                             <input type="submit" name="check_in" id="check_in" value="Check In">
 
 
-                            <?php if (!$checkInDisabled) : ?>
-                                <h1>Remark:</h1><input type="text" name="remark" id="remark">
-                            <?php endif; ?>
+                            <td><input type="text" name="remark" id="remark"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -373,7 +313,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 
-        <form class="hidden-form" method="post" enctype="multipart/form-data" onsubmit="getLocationAndSubmit(event, true)">
+        <form method="post" enctype="multipart/form-data" onsubmit="getLocationAndSubmit(event, true)">
             <div class="info coon">
                 <h1>Promoter's Name:</h1><input type="text" readonly name="promoter_name" value="<?php echo $user_data['promoter_name']; ?>"> <br>
                 <h1>Promoter's Phone Number:</h1><input type="text" readonly name="promoter_phone" value="<?php echo $user_data['promoter_phone']; ?>"><br>
@@ -396,13 +336,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <input type="hidden" name="latitude_check_out" id="latitude_check_out">
                             <input type="hidden" name="longitude_check_out" id="longitude_check_out">
                             <input class="coon" type="text" name="check_out" value="Yes">
+                            <input class="coon" type="datetime-local" name="check_out_time" id="check_out_time">
 
                             <input type="submit" name="check_out" id="check_out" value="Check Out">
 
 
-                            <?php if (!$checkOutDisabled) : ?>
-                                <h1>Remark:</h1><input type="text" name="remark" id="remark">
-                            <?php endif; ?>
+                            <td><input type="text" name="remark" id="remark"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -462,17 +401,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         </script>
         <script>
+            const currentDate = new Date();
+            const year = currentDate.getFullYear();
+            const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+            const day = currentDate.getDate().toString().padStart(2, '0');
+            const hours = currentDate.getHours().toString().padStart(2, '0');
+            const minutes = currentDate.getMinutes().toString().padStart(2, '0');
+
+            const currentDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+
+            // Set the value of the input with ID "check_out_time" to the current date and time
+            document.getElementById("check_out_time").value = currentDateTime;
+
+            // Set the value of the input with ID "attendance_time" to the current date and time
+            document.getElementById("attendance_time").value = currentDateTime;
+        </script>
+        <script>
             document.addEventListener("DOMContentLoaded", function() {
                 const checkInButton = document.getElementById("check_in");
                 const checkOutButton = document.getElementById("check_out");
-                const secondForm = document.querySelector(".hidden-form");
 
                 <?php if ($checkInDisabled) : ?>
                     checkInButton.disabled = true;
                     checkInButton.value = "Already Checked In";
-                    checkInButton.style.backgroundColor = "#4CAF50"; // Green color
-                    checkInButton.style.color = "#FFFFFF"; // White text color
-                    secondForm.style.display = "block"; // Show the second form
                 <?php else : ?>
                     const attendanceTimeInput = document.getElementById("attendance_time");
                     attendanceTimeInput.value = getCurrentDateTime();
@@ -481,13 +432,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <?php if ($checkOutDisabled) : ?>
                     checkOutButton.disabled = true;
                     checkOutButton.value = "Already Checked Out";
-                    checkOutButton.style.backgroundColor = "#4CAF50"; // Green color
-                    checkOutButton.style.color = "#FFFFFF"; // White text color
                 <?php else : ?>
                     const checkOutTimeInput = document.getElementById("check_out_time");
                     checkOutTimeInput.value = getCurrentDateTime();
                 <?php endif; ?>
 
+                function getCurrentDateTime() {
+                    const currentDate = new Date();
+                    const year = currentDate.getFullYear();
+                    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+                    const day = currentDate.getDate().toString().padStart(2, '0');
+                    const hours = currentDate.getHours().toString().padStart(2, '0');
+                    const minutes = currentDate.getMinutes().toString().padStart(2, '0');
+
+                    return `${year}-${month}-${day}T${hours}:${minutes}`;
+                }
             });
         </script>
     </div>
