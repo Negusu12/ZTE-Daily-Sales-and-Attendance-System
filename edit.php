@@ -67,7 +67,18 @@ if ($_SERVER["REQUEST_METHOD"] == 'GET') {
     if (!$stmt->execute()) {
       $error = "Error: " . $stmt->error;
     } else {
-      $success = "User Updated Successfully";
+      echo "<script>
+        window.onload = function() {
+            Swal.fire({
+                icon: 'success',
+                title: 'User Updated Successfully',
+                showConfirmButton: true,
+                confirmButtonText: 'OK',
+            }).then(function() {
+                window.location.href = 'users.php';
+            });
+        }
+    </script>";
     }
   }
 }
@@ -81,6 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'GET') {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/png" href="assets/images/icons/favicon.ico" />
+  <link rel="stylesheet" href="css/sweetalert2.min.css">
 
   <style>
     body {
@@ -233,6 +245,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'GET') {
       </div>
     </div>
   </div>
+  <script src="js/sweetalert2.min.js"></script>
 </body>
 
 </html>

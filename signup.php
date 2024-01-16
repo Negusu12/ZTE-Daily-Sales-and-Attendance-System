@@ -79,12 +79,12 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                     <img src="images/zte.png" alt="illustration" class="illustrationn">
                     <h1 class="opacity">Signup</h1>
                     <form method="post">
-                        <input type="text" name="user_name" onkeyup="lettersOnly(this)" placeholder="USERNAME" />
-                        <input type="password" name="password" placeholder="PASSWORD" />
-                        <input type="text" name="promoter_name" onkeyup="lettersOnly(this)" placeholder="PROMOTER NAME" />
-                        <input type="text" name="promoter_phone" placeholder="PROMOTER PHONE" />
-                        <input type="text" name="shop" placeholder="SHOP" />
-                        <select name="role" placeholder="ROLE">
+                        <input type="text" name="user_name" onkeyup="lettersOnly(this)" placeholder="USERNAME" required />
+                        <input type="password" name="password" placeholder="PASSWORD" required />
+                        <input type="text" name="promoter_name" onkeyup="lettersOnly(this)" placeholder="PROMOTER NAME" required />
+                        <input type="text" name="promoter_phone" placeholder="PROMOTER PHONE" required />
+                        <input type="text" name="shop" placeholder="SHOP" required />
+                        <select name="role" placeholder="ROLE" required>
                             <option value="">Select an Role</option>
                             <option value="2">Sales</option>
                             <option value="1">Admin</option>
