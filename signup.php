@@ -21,8 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
     if (!empty($user_name) && !empty($password) && !is_numeric(($user_name))) {
         $user_id = random_num(20);
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
         $query = "INSERT INTO users (user_id, user_name, password, promoter_name, promoter_phone, shop, role)
-                  VALUES ('$user_id', '$user_name', '$password', '$promoter_name', '$promoter_phone', '$shop', '$role')";
+                  VALUES ('$user_id', '$user_name', '$hashed_password', '$promoter_name', '$promoter_phone', '$shop', '$role')";
         $result = mysqli_query($con, $query);
 
         if ($result) {

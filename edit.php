@@ -10,48 +10,64 @@ if ($_SERVER["REQUEST_METHOD"] == 'GET') {
     header('Location: users.php');
     exit;
   }
+
   $id = $_GET['id'];
-  $sql = "SELECT * FROM users WHERE id=?";
+  $sql = "SELECT id, user_name, promoter_name, promoter_phone, shop, role FROM users WHERE id=?";
   $stmt = $con->prepare($sql);
   $stmt->bind_param('i', $id);
+
   if (!$stmt->execute()) {
     $error = "Error: " . $stmt->error;
   } else {
-    $result = $stmt->get_result();
-    if ($result->num_rows == 0) {
+    $stmt->store_result();
+
+    if ($stmt->num_rows == 0) {
       header('Location: users.php');
       exit;
     }
-    $row = $result->fetch_assoc();
-    $user_name = $row["user_name"];
-    $password = $row["password"];
-    $promoter_name = $row["promoter_name"];
-    $promoter_phone = $row["promoter_phone"];
-    $shop = $row["shop"];
-    $role = $row["role"];
+
+    $stmt->bind_result($id, $user_name, $promoter_name, $promoter_phone, $shop, $role);
+    $stmt->fetch();
   }
 } else {
   $id = $_POST["id"];
   $user_name = $_POST["user_name"];
-  $password = $_POST["password"];
   $promoter_name = $_POST["promoter_name"];
   $promoter_phone = $_POST["promoter_phone"];
   $shop = $_POST["shop"];
   $role = $_POST["role"];
 
+  // Retrieve the old hashed password from the database
+  $sqlOldPassword = "SELECT password FROM users WHERE id=?";
+  $stmtOldPassword = $con->prepare($sqlOldPassword);
+  $stmtOldPassword->bind_param('i', $id);
+  if (!$stmtOldPassword->execute()) {
+    $error = "Error: " . $stmtOldPassword->error;
+  } else {
+    $stmtOldPassword->store_result();
 
+    if ($stmtOldPassword->num_rows == 0) {
+      $error = "Error: User not found";
+    } else {
+      $stmtOldPassword->bind_result($old_password);
+      $stmtOldPassword->fetch();
+    }
+  }
+  $stmtOldPassword->close();
+
+  // Check if a new password is provided
+  $new_password = isset($_POST["password"]) ? $_POST["password"] : $old_password;
 
   if (empty($error)) {
+    $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
     $sql = "UPDATE users SET user_name=?, password=?, promoter_name=?, promoter_phone=?, shop=?, role=? WHERE id=?";
     $stmt = $con->prepare($sql);
-    $stmt->bind_param('ssssssi', $user_name, $password, $promoter_name, $promoter_phone, $shop, $role, $id);
+    $stmt->bind_param('ssssssi', $user_name, $hashed_password, $promoter_name, $promoter_phone, $shop, $role, $id);
+
     if (!$stmt->execute()) {
       $error = "Error: " . $stmt->error;
     } else {
-      echo "<script>
-      alert('User Updated Successfully');
-      window.location.href = 'users.php';
-    </script>";
+      $success = "User Updated Successfully";
     }
   }
 }
