@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.29, for Win64 (x86_64)
 --
--- Host: localhost    Database: zte1
+-- Host: localhost    Database: zte_abh
 -- ------------------------------------------------------
 -- Server version	8.0.29
 
@@ -41,6 +41,15 @@ CREATE TABLE `attendance_sheet` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `attendance_sheet`
+--
+
+LOCK TABLES `attendance_sheet` WRITE;
+/*!40000 ALTER TABLE `attendance_sheet` DISABLE KEYS */;
+/*!40000 ALTER TABLE `attendance_sheet` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `check_in`
 --
 
@@ -63,6 +72,15 @@ CREATE TABLE `check_in` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `check_in`
+--
+
+LOCK TABLES `check_in` WRITE;
+/*!40000 ALTER TABLE `check_in` DISABLE KEYS */;
+/*!40000 ALTER TABLE `check_in` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `check_out`
 --
 
@@ -83,6 +101,15 @@ CREATE TABLE `check_out` (
   CONSTRAINT `check_out_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `check_out`
+--
+
+LOCK TABLES `check_out` WRITE;
+/*!40000 ALTER TABLE `check_out` DISABLE KEYS */;
+/*!40000 ALTER TABLE `check_out` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Temporary view structure for view `combined_attendance_view`
@@ -162,6 +189,15 @@ CREATE TABLE `daily_sales` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `daily_sales`
+--
+
+LOCK TABLES `daily_sales` WRITE;
+/*!40000 ALTER TABLE `daily_sales` DISABLE KEYS */;
+/*!40000 ALTER TABLE `daily_sales` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Temporary view structure for view `daily_sales_view`
 --
 
@@ -200,8 +236,18 @@ CREATE TABLE `users` (
   `role` varchar(10) NOT NULL,
   `date` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (12,'72595130401863299559','admin','$2y$10$a7zZzNDdvdj0tPZROprmg.UlA0H/hLS7/.bJY3MT8Ff7Gd7C1h8uS','Negusu','+251912608380','ABH HQ','1',NULL);
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Temporary view structure for view `weekly_sales_report`
@@ -291,4 +337,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-11-25  4:12:13
+-- Dump completed on 2024-01-16 10:53:57
