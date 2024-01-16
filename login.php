@@ -55,106 +55,39 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 <html lang="en">
 
 <head>
-    <title>LogIn</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!--===============================================================================================-->
-    <link rel="icon" type="image/png" href="images/logo.png" />
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="css/login/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="css/login/css/util.css">
-    <link rel="stylesheet" type="text/css" href="css/login/css/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="css/login.css">
     <link rel="stylesheet" href="css/sweetalert2.min.css">
-    <!--===============================================================================================-->
+
 </head>
 
 <body>
-    <!--Image loader start-->
-    <div class="loader">
-        <img src="images/logo.png" alt="Logoo" class="logoo">
-    </div>
+    <!-- partial:index.partial.html -->
 
-    <div class="limiter">
-        <div class="container-login100">
-            <div class="wrap-login100">
-                <div class="login100-pic js-tilt" data-tilt>
-                    <a class="navbar-brand">
-                        <img src="images/logo.png" alt="IMG">
-                    </a>
-                </div>
-
-                <div id="box">
+    <body>
+        <section class="container">
+            <div class="login-container">
+                <div class="circle circle-one"></div>
+                <div class="form-container">
+                    <img src="images/logo.png" alt="illustration" class="illustration">
+                    <img src="images/zte.png" alt="illustration" class="illustrationn">
+                    <h1 class="opacity">LOGIN</h1>
                     <form method="post">
-                        <span class="login100-form-title">
-                            Admin Login
-                        </span>
-
-                        <div class="wrap-input100">
-                            <input class="input100" id="text" type="text" name="user_name" placeholder="Username" onkeyup="lettersOnly(this)">
-                            <span class="focus-input100"></span>
-                            <span class="symbol-input100">
-                                <i class="fa fa-user" aria-hidden="true"></i>
-                            </span>
-                        </div>
-
-                        <div class="wrap-input100" data-validate="Password is required">
-                            <input class="input100" id="text" type="password" name="password" placeholder="Password">
-                            <span class="focus-input100"></span>
-                            <span class="symbol-input100">
-                                <i class="fa fa-lock" aria-hidden="true"></i>
-                            </span>
-                        </div>
-
-                        <div class="container-login100-form-btn">
-
-                            <input class="login100-form-btn" type="submit" value="Login">
-
-                        </div>
-
-
-                        <div class="text-center p-t-136">
-
-                        </div>
-
+                        <input type="text" name="user_name" onkeyup="lettersOnly(this)" placeholder="USERNAME" />
+                        <input type="password" name="password" placeholder="PASSWORD" />
+                        <button class="opacity" type="submit">SUBMIT</button>
                     </form>
                 </div>
+                <div class="circle circle-two"></div>
             </div>
-        </div>
-
-
-
-
-        <!--===============================================================================================-->
-        <script src="js/jquery/jquery-3.3.1.min.js"></script>
-        <!--===============================================================================================-->
-        <script src="vendor/bootstrap/js/popper.js"></script>
-        <script src="js/bootstrap/js/bootstrap.min.js"></script>
-        <!--===============================================================================================-->
-        <script src="vendor/select2/select2.min.js"></script>
-        <!--===============================================================================================-->
-        <script src="vendor/tilt/tilt.jquery.min.js"></script>
-        <script>
-            $('.js-tilt').tilt({
-                scale: 1.1
-            })
-        </script>
-        <!--===============================================================================================-->
-        <script src="js/main.js"></script>
-        <script src="assets/js/js.js"></script>
-        <script src="js/sweetalert2.min.js"></script>
-        <!-- Image page loader-->
-        <script>
-            window.addEventListener("load", () => {
-                const loader = document.querySelector(".loader");
-
-                loader.classList.add("loader--hidden");
-
-                loader.addEventListener("transitionend", () => {
-                    document.body.removeChild(loader);
-                });
-            });
-        </script>
+            <div class="theme-btn-container"></div>
+        </section>
+    </body>
+    <!-- partial -->
+    <script src="js/login.js"></script>
+    <script src="js/sweetalert2.min.js"></script>
 
 </body>
 

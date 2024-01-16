@@ -27,9 +27,18 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
         if ($result) {
             echo "<script>
-            alert('User added Successfully');
-            window.location.href = 'users.php';
-          </script>";
+        window.onload = function() {
+            Swal.fire({
+                icon: 'success',
+                title: 'User Added Successfully',
+                showConfirmButton: true,
+                confirmButtonText: 'OK',
+                timer: 2000
+            }).then(function() {
+                window.location.href = 'users.php';
+            });
+        }
+    </script>";
         } else {
             echo "<script> 
                     Swal.fire({
@@ -49,121 +58,48 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 <html lang="en">
 
 <head>
-    <title>Sign Up</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!--===============================================================================================-->
-    <link rel="icon" type="image/png" href="assets/images/icons/favicon.ico" />
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="css/login/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="css/login/css/util.css">
-    <link rel="stylesheet" type="text/css" href="css/login/css/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <link rel="stylesheet" href="css/login.css">
     <link rel="stylesheet" href="css/sweetalert2.min.css">
-    <!--===============================================================================================-->
+
 </head>
 
 <body>
-    <!--Image loader start-->
-    <div class="loader">
-        <img src="images/logo.png" alt="Logoo" class="logoo">
-    </div>
+    <!-- partial:index.partial.html -->
 
-    <div class="limiter">
-        <div class="container-login100">
-            <div class="wrap-login100">
-                <div class="login100-pic js-tilt" data-tilt>
-                    <img src="images/logo.png" alt="IMG">
-                </div>
-
-                <div id="box" class="box">
+    <body>
+        <section class="container">
+            <div class="login-container">
+                <div class="circle circle-one"></div>
+                <div class="form-container">
+                    <img src="images/logo.png" alt="illustration" class="illustration">
+                    <img src="images/zte.png" alt="illustration" class="illustrationn">
+                    <h1 class="opacity">Signup</h1>
                     <form method="post">
-                        <span class="login100-form-title">
-                            Signup
-                        </span>
-
-                        <div class="wrap-input100 validate-input" data-validate="Valid Username is required: ex@abc.xyz">
-                            <input class="input100" id="text" type="text" name="user_name" onkeyup="lettersOnly(this)" placeholder="Username">
-                            <span class="focus-input100"></span>
-                            <span class="symbol-input100">
-                                <i class="fa fa-user"></i>
-                            </span>
-                        </div>
-
-                        <div class="wrap-input100 validate-input" data-validate="Password is required">
-                            <input class="input100" id="text" type="password" name="password" placeholder="Password">
-                            <span class="focus-input100"></span>
-                            <span class="symbol-input100">
-                                <i class="fa fa-lock" aria-hidden="true"></i>
-                            </span>
-                        </div>
-
-
-                        <div class="wrap-input100 validate-input" data-validate="Valid promoter_name is required: ex@abc.xyz">
-                            <input class="input100" id="text" type="text" name="promoter_name" onkeyup="lettersOnly(this)" placeholder="promoter_name">
-                            <span class="focus-input100"></span>
-                            <span class="symbol-input100">
-                                <i class="fa fa-user"></i>
-                            </span>
-                        </div>
-
-                        <div class="wrap-input100 validate-input" data-validate="promoter_phone is required">
-                            <input class="input100" id="text" type="text" name="promoter_phone" placeholder="promoter_phone">
-                            <span class="focus-input100"></span>
-                            <span class="symbol-input100">
-                                <i class="fa fa-lock" aria-hidden="true"></i>
-                            </span>
-                        </div>
-
-                        <div class="wrap-input100 validate-input" data-validate="shop is required">
-                            <input class="input100" id="text" type="text" name="shop" placeholder="shop">
-                            <span class="focus-input100"></span>
-                            <span class="symbol-input100">
-                                <i class="fa fa-lock" aria-hidden="true"></i>
-                            </span>
-                        </div>
-
-                        <div class="wrap-input100 validate-input" data-validate="Role is required">
-                            <select class="input100" id="text" name="role">
-                                <option value="">Select an Role</option>
-                                <option value="2">Sales</option>
-                                <option value="1">Admin</option>
-                            </select>
-                            <span class="focus-input100"></span>
-                            <span class="symbol-input100">
-                                <i class="fa fa-lock" aria-hidden="true"></i>
-                            </span>
-                        </div>
-
-                        <div class="container-login100-form-btn">
-
-                            <input class="login100-form-btn" type="submit" value="Signup">
-
-                        </div>
-
-
-                        <div class="text-center p-t-136">
-
-                        </div>
-
+                        <input type="text" name="user_name" onkeyup="lettersOnly(this)" placeholder="USERNAME" />
+                        <input type="password" name="password" placeholder="PASSWORD" />
+                        <input type="text" name="promoter_name" onkeyup="lettersOnly(this)" placeholder="PROMOTER NAME" />
+                        <input type="text" name="promoter_phone" placeholder="PROMOTER PHONE" />
+                        <input type="text" name="shop" placeholder="SHOP" />
+                        <select name="role" placeholder="ROLE">
+                            <option value="">Select an Role</option>
+                            <option value="2">Sales</option>
+                            <option value="1">Admin</option>
+                        </select>
+                        <button class="opacity" type="submit" value="Signup">SUBMIT</button>
                     </form>
                 </div>
+                <div class="circle circle-two"></div>
             </div>
-        </div>
-        <script src="assets/js/js.js"></script>
-        <script src="js/sweetalert2.min.js"></script>
-        <!-- Image page loader-->
-        <script>
-            window.addEventListener("load", () => {
-                const loader = document.querySelector(".loader");
+            <div class="theme-btn-container"></div>
+        </section>
+    </body>
+    <!-- partial -->
+    <script src="js/login.js"></script>
+    <script src="js/sweetalert2.min.js"></script>
 
-                loader.classList.add("loader--hidden");
-
-                loader.addEventListener("transitionend", () => {
-                    document.body.removeChild(loader);
-                });
-            });
-        </script>
 </body>
 
 </html>
