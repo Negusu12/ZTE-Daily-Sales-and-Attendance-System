@@ -83,7 +83,7 @@ if ($user_data['role'] == 2) {
         <option value="3">Users</option>
     </select>
     <?php {
-        $result = mysqli_query($con, "SELECT * FROM combined_attendance_view");
+        $result = mysqli_query($con, "SELECT * FROM combined_attendance_view where status='Active'");
     ?>
 
         <section class="tbl-header table-responsive">

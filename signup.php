@@ -18,12 +18,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $promoter_phone = $_POST['promoter_phone'];
     $shop = $_POST['shop'];
     $role = $_POST['role'];
+    $status = $_POST['status'];
 
     if (!empty($user_name) && !empty($password) && !is_numeric(($user_name))) {
         $user_id = random_num(20);
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-        $query = "INSERT INTO users (user_id, user_name, password, promoter_name, promoter_phone, shop, role)
-                  VALUES ('$user_id', '$user_name', '$hashed_password', '$promoter_name', '$promoter_phone', '$shop', '$role')";
+        $query = "INSERT INTO users (user_id, user_name, password, promoter_name, promoter_phone, shop, role, status)
+                  VALUES ('$user_id', '$user_name', '$hashed_password', '$promoter_name', '$promoter_phone', '$shop', '$role', '$status')";
         $result = mysqli_query($con, $query);
 
         if ($result) {
@@ -89,6 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                             <option value="2">Sales</option>
                             <option value="1">Admin</option>
                         </select>
+                        <input type="text" name="status" value="Active" style="display: none;" />
                         <button class="opacity" type="submit" value="Signup">SUBMIT</button>
                     </form>
                 </div>

@@ -94,6 +94,7 @@ $user_data = check_login($con);
                             <th>Promoter Name</th>
                             <th>Promoter Phone</th>
                             <th>Shop</th>
+                            <th>Status</th>
                             <th>Role</th>
                             <th>Action</th>
 
@@ -112,6 +113,7 @@ $user_data = check_login($con);
                             echo "<td>" . $row['promoter_name'] . "</td>";
                             echo "<td>" . $row['promoter_phone'] . "</td>";
                             echo "<td>" . $row['shop'] . "</td>";
+                            echo "<td>" . $row['status'] . "</td>";
                             echo "<td>" . ($row['role'] == 1 ? 'Admin' : ($row['role'] == 2 ? 'Sales' : '')) . "</td>";
 
                             echo "<td>

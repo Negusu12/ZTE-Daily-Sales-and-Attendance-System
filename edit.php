@@ -2,7 +2,7 @@
 
 include "connect.php";
 
-$id = $user_name = $password = $promoter_name = $promoter_phone = $shop = $role = "";
+$id = $user_name = $password = $promoter_name = $promoter_phone = $shop = $status = $role = "";
 $error = $success = "";
 
 if ($_SERVER["REQUEST_METHOD"] == 'GET') {
@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'GET') {
   }
 
   $id = $_GET['id'];
-  $sql = "SELECT id, user_name, promoter_name, promoter_phone, shop, role FROM users WHERE id=?";
+  $sql = "SELECT id, user_name, promoter_name, promoter_phone, shop, status, role FROM users WHERE id=?";
   $stmt = $con->prepare($sql);
   $stmt->bind_param('i', $id);
 
@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'GET') {
       exit;
     }
 
-    $stmt->bind_result($id, $user_name, $promoter_name, $promoter_phone, $shop, $role);
+    $stmt->bind_result($id, $user_name, $promoter_name, $promoter_phone, $shop, $status, $role);
     $stmt->fetch();
   }
 } else {
@@ -35,6 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'GET') {
   $promoter_name = $_POST["promoter_name"];
   $promoter_phone = $_POST["promoter_phone"];
   $shop = $_POST["shop"];
+  $status = $_POST["status"];
   $role = $_POST["role"];
 
   // Retrieve the old hashed password from the database
@@ -60,9 +61,9 @@ if ($_SERVER["REQUEST_METHOD"] == 'GET') {
 
   if (empty($error)) {
     $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
-    $sql = "UPDATE users SET user_name=?, password=?, promoter_name=?, promoter_phone=?, shop=?, role=? WHERE id=?";
+    $sql = "UPDATE users SET user_name=?, password=?, promoter_name=?, promoter_phone=?, shop=?, status=?, role=? WHERE id=?";
     $stmt = $con->prepare($sql);
-    $stmt->bind_param('ssssssi', $user_name, $hashed_password, $promoter_name, $promoter_phone, $shop, $role, $id);
+    $stmt->bind_param('sssssssi', $user_name, $hashed_password, $promoter_name, $promoter_phone, $shop, $status, $role, $id);
 
     if (!$stmt->execute()) {
       $error = "Error: " . $stmt->error;
@@ -224,6 +225,13 @@ if ($_SERVER["REQUEST_METHOD"] == 'GET') {
             <div class="form-group">
               <label for="shop">Shop:</label>
               <textarea name="shop" required><?php echo $shop ?></textarea>
+            </div>
+            <div class="form-group">
+              <label for="status">Status:</label>
+              <select name="status" required>
+                <option value="Active" <?php echo ($status == 'Active') ? 'selected' : ''; ?>>Active</option>
+                <option value="Terminated" <?php echo ($status == 'Terminated') ? 'selected' : ''; ?>>Terminated</option>
+              </select>
             </div>
             <div class="form-group">
               <label for="role">Role:</label>
