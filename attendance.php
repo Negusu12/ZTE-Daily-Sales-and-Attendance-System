@@ -53,9 +53,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $latitude = $_POST['latitude'];
         $longitude = $_POST['longitude'];
         $remark = $_POST['remark'];
+        $date = $_POST['date'];
 
-        $sql = $con->prepare("INSERT INTO check_in (user_id, check_in, latitude, longitude, remark) VALUES (?, ?, ?, ?, ?)");
-        $sql->bind_param("issss", $userID, $checkIn, $latitude, $longitude, $remark);
+        $sql = $con->prepare("INSERT INTO check_in (user_id, check_in, latitude, longitude, remark, date) VALUES (?, ?, ?, ?, ?, ?)");
+        $sql->bind_param("isssss", $userID, $checkIn, $latitude, $longitude, $remark, $date);
 
 
         if ($sql->execute()) {
@@ -93,9 +94,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $latitudeCheckOut = $_POST['latitude_check_out'];
         $longitudeCheckOut = $_POST['longitude_check_out'];
         $remark = $_POST['remark'];
+        $date = $_POST['date'];
 
-        $sql = $con->prepare("INSERT INTO check_out (user_id, check_out, latitude_check_out, longitude_check_out, remark) VALUES (?, ?, ?, ?, ?)");
-        $sql->bind_param("issss", $userID, $checkOut, $latitudeCheckOut, $longitudeCheckOut, $remark);
+        $sql = $con->prepare("INSERT INTO check_out (user_id, check_out, latitude_check_out, longitude_check_out, remark, date) VALUES (?, ?, ?, ?, ?, ?)");
+        $sql->bind_param("isssss", $userID, $checkOut, $latitudeCheckOut, $longitudeCheckOut, $remark, $date);
 
         if ($sql->execute()) {
             echo "<script>
@@ -336,6 +338,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <h1>Promoter's Name:</h1><input type="text" readonly name="promoter_name" value="<?php echo $user_data['promoter_name']; ?>"> <br>
                 <h1>Promoter's Phone Number:</h1><input type="text" readonly name="promoter_phone" value="<?php echo $user_data['promoter_phone']; ?>"><br>
                 <h1>Name of the Shop</h1><input type="text" readonly name="shop" value="<?php echo $user_data['shop']; ?>"><br>
+                <input type="text" readonly name="date" id="dateField" style="display: none;">
                 <h1>Shop level (Circle One): Grand/Premium/Higher</h1><br>
             </div>
             <?php if ($user_data['role'] == 2) : ?>
@@ -378,6 +381,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <h1>Promoter's Name:</h1><input type="text" readonly name="promoter_name" value="<?php echo $user_data['promoter_name']; ?>"> <br>
                 <h1>Promoter's Phone Number:</h1><input type="text" readonly name="promoter_phone" value="<?php echo $user_data['promoter_phone']; ?>"><br>
                 <h1>Name of the Shop</h1><input type="text" readonly name="shop" value="<?php echo $user_data['shop']; ?>"><br>
+                <input type="text" readonly name="date" id="dateFieldd" style="display: none;">
                 <h1>Shop level (Circle One): Grand/Premium/Higher</h1><br>
             </div>
             <?php if ($user_data['role'] == 2) : ?>
@@ -489,6 +493,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <?php endif; ?>
 
             });
+        </script>
+
+        <script>
+            // Get the current date in the format "YYYY-MM-DD"
+            var currentDate = new Date().toISOString().split('T')[0];
+
+            // Set the default value of the input field
+            document.getElementById("dateField").value = currentDate;
+        </script>
+        <script>
+            // Get the current date in the format "YYYY-MM-DD"
+            var currentDate = new Date().toISOString().split('T')[0];
+
+            // Set the default value of the input field
+            document.getElementById("dateFieldd").value = currentDate;
         </script>
     </div>
 </body>

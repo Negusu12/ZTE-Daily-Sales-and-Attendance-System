@@ -68,7 +68,7 @@ CREATE TABLE `check_in` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `check_in_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -99,7 +99,7 @@ CREATE TABLE `check_out` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `check_out_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -123,6 +123,7 @@ SET @saved_cs_client     = @@character_set_client;
  1 AS `user_id`,
  1 AS `promoter_name`,
  1 AS `shop`,
+ 1 AS `status`,
  1 AS `date`,
  1 AS `check_in_id`,
  1 AS `check_out_id`,
@@ -185,7 +186,7 @@ CREATE TABLE `daily_sales` (
   `mf286c_remark` varchar(255) DEFAULT NULL,
   `remark` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -235,8 +236,9 @@ CREATE TABLE `users` (
   `shop` varchar(255) NOT NULL,
   `role` varchar(10) NOT NULL,
   `date` timestamp NULL DEFAULT NULL,
+  `status` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -245,7 +247,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (12,'72595130401863299559','admin','$2y$10$a7zZzNDdvdj0tPZROprmg.UlA0H/hLS7/.bJY3MT8Ff7Gd7C1h8uS','Negusu','+251912608380','ABH HQ','1',NULL);
+INSERT INTO `users` VALUES (26,'2050939250175','admin','$2y$10$M1jRRSRBiooEh9ay386xc.W1UaLeELSz0mjk/7eLNP5uXId2L0eGu','Administrator','+251912608380','ABH HQ','1',NULL,'Active');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -287,7 +289,7 @@ SET character_set_client = @saved_cs_client;
 /*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `combined_attendance_view` AS select `u`.`id` AS `user_id`,`u`.`promoter_name` AS `promoter_name`,`u`.`shop` AS `shop`,`d`.`date` AS `date`,`a`.`id` AS `check_in_id`,`co`.`id` AS `check_out_id`,coalesce(`a`.`check_in`,'No') AS `check_in`,ifnull(`a`.`latitude`,'') AS `latitude`,ifnull(`a`.`longitude`,'') AS `longitude`,ifnull(`a`.`attendance_time`,'') AS `attendance_time`,ifnull(`a`.`remark`,'') AS `remark_check_in`,coalesce(`co`.`check_out`,'No') AS `check_out`,ifnull(`co`.`latitude_check_out`,'') AS `latitude_check_out`,ifnull(`co`.`longitude_check_out`,'') AS `longitude_check_out`,ifnull(`co`.`check_out_time`,'') AS `check_out_time`,ifnull(`co`.`remark`,'') AS `remark_check_out` from ((((select distinct `users`.`user_id` AS `user_id`,`dates`.`date` AS `date` from ((select `users`.`id` AS `user_id` from `users` where (`users`.`role` = 2)) `users` join (select distinct `combined_dates`.`date` AS `date` from (select `check_in`.`date` AS `date` from `check_in` union select `check_out`.`date` AS `date` from `check_out`) `combined_dates`) `dates`)) `d` left join `users` `u` on((`d`.`user_id` = `u`.`id`))) left join `check_in` `a` on(((`d`.`user_id` = `a`.`user_id`) and (`d`.`date` = `a`.`date`)))) left join `check_out` `co` on(((`d`.`user_id` = `co`.`user_id`) and (`d`.`date` = `co`.`date`)))) */;
+/*!50001 VIEW `combined_attendance_view` AS select `u`.`id` AS `user_id`,`u`.`promoter_name` AS `promoter_name`,`u`.`shop` AS `shop`,`u`.`status` AS `status`,`d`.`date` AS `date`,`a`.`id` AS `check_in_id`,`co`.`id` AS `check_out_id`,coalesce(`a`.`check_in`,'No') AS `check_in`,ifnull(`a`.`latitude`,'') AS `latitude`,ifnull(`a`.`longitude`,'') AS `longitude`,ifnull(`a`.`attendance_time`,'') AS `attendance_time`,ifnull(`a`.`remark`,'') AS `remark_check_in`,coalesce(`co`.`check_out`,'No') AS `check_out`,ifnull(`co`.`latitude_check_out`,'') AS `latitude_check_out`,ifnull(`co`.`longitude_check_out`,'') AS `longitude_check_out`,ifnull(`co`.`check_out_time`,'') AS `check_out_time`,ifnull(`co`.`remark`,'') AS `remark_check_out` from ((((select distinct `users`.`user_id` AS `user_id`,`dates`.`date` AS `date` from ((select `users`.`id` AS `user_id` from `users` where (`users`.`role` = 2)) `users` join (select distinct `combined_dates`.`date` AS `date` from (select `check_in`.`date` AS `date` from `check_in` union select `check_out`.`date` AS `date` from `check_out`) `combined_dates`) `dates`)) `d` left join `users` `u` on((`d`.`user_id` = `u`.`id`))) left join `check_in` `a` on(((`d`.`user_id` = `a`.`user_id`) and (`d`.`date` = `a`.`date`)))) left join `check_out` `co` on(((`d`.`user_id` = `co`.`user_id`) and (`d`.`date` = `co`.`date`)))) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -337,4 +339,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-01-16 10:53:57
+-- Dump completed on 2024-01-17  6:30:05
