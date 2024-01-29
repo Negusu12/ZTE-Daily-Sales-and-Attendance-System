@@ -80,6 +80,7 @@ if ($user_data['role'] == 2) {
         <option value="">Reports</option>
         <option value="1">Report Daily Sales</option>
         <option value="2">Report Weekly Sales</option>
+        <option value="6">Monthly Attendance Sheet</option>
         <option value="3">Users</option>
     </select>
     <?php {
@@ -257,6 +258,8 @@ if ($user_data['role'] == 2) {
                 window.location.href = "attendance";
             } else if (selectedValue === "5") {
                 window.location.href = "attendance_sheet";
+            } else if (selectedValue === "6") {
+                window.location.href = "report_monthly_attendance";
             }
         }
     </script>

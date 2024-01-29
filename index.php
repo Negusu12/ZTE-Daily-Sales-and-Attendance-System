@@ -305,6 +305,7 @@ $user_data = check_login($con);
         <option value="2">Report Weekly Sales</option>
         <option value="3">Users</option>
         <option value="5">Attendance Sheet</option>
+        <option value="6">Monthly Attendance Sheet</option>
       </select>
     <?php endif; ?>
 
@@ -432,6 +433,8 @@ $user_data = check_login($con);
         window.location.href = "attendance";
       } else if (selectedValue === "5") {
         window.location.href = "attendance_sheet";
+      } else if (selectedValue === "6") {
+        window.location.href = "report_monthly_attendance";
       }
     }
   </script>
