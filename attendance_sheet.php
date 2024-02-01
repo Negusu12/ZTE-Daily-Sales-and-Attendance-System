@@ -12,6 +12,39 @@ if ($user_data['role'] == 2) {
     exit();
 }
 
+$sql = "SELECT * FROM combined_attendance_view where status='Active' and 1=1";
+
+// Date range filter
+if (isset($_POST['from_date']) && isset($_POST['to_date'])) {
+    $from_date = $_POST['from_date'];
+    $to_date = $_POST['to_date'];
+
+    // Validate date format (you may need to adjust this based on your needs)
+    if (strtotime($from_date) && strtotime($to_date)) {
+        $sql .= " AND date BETWEEN '$from_date 00:00:00' AND '$to_date 23:59:59'";
+    } else {
+        // Handle invalid date format if needed
+        // You can add an error message or redirect back to the form with an error
+    }
+}
+
+// Type filter
+if (isset($_POST['type'])) {
+    $type = $_POST['type'];
+    if ($type == 'comment') {
+        $sql .= " AND type = 'comment'";
+    } elseif ($type == 'partner') {
+        $sql .= " AND type = 'partner'";
+    }
+}
+
+// Continue with the existing code...
+
+$result = $con->query($sql);
+if (!$result) {
+    die("Invalid query!");
+}
+
 ?>
 
 
@@ -83,8 +116,20 @@ if ($user_data['role'] == 2) {
         <option value="6">Monthly Attendance Sheet</option>
         <option value="3">Users</option>
     </select>
+    <form method="post" action="" class="s_form">
+        <div class="form-group">
+            <label class="labela1 row-2" for="from_date">From Date:</label>
+            <input type="date" class="form-control" name="from_date" id="from_date">
+        </div>
+
+        <div class="form-group">
+            <label class="labela1 row-2" for="to_date">To Date:</label>
+            <input type="date" class="form-control" name="to_date" id="to_date">
+        </div>
+
+        <button type="submit" class="btn btn-primary submita1">Submit</button>
+    </form>
     <?php {
-        $result = mysqli_query($con, "SELECT * FROM combined_attendance_view where status='Active'");
     ?>
 
         <section class="tbl-header table-responsive">
