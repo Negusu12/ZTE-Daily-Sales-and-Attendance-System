@@ -148,12 +148,12 @@ if (!$result) {
     <form method="post" action="" class="s_form form-inline">
         <div class="form-group">
             <label class="labela1" for="from_date">From Date:</label>
-            <input type="date" class="form-control" name="from_date" id="from_date">
+            <input type="date" class="form-control" name="from_date" id="from_date" value="<?php echo isset($_POST['from_date']) ? $_POST['from_date'] : ''; ?>">
         </div>
 
         <div class="form-group">
             <label class="labela1" for="to_date">To Date:</label>
-            <input type="date" class="form-control" name="to_date" id="to_date">
+            <input type="date" class="form-control" name="to_date" id="to_date" value="<?php echo isset($_POST['to_date']) ? $_POST['to_date'] : ''; ?>">
         </div>
 
         <button type="submit" class="btn btn-primary submita1">Submit</button>
