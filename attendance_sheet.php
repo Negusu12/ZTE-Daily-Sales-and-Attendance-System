@@ -96,6 +96,35 @@ if (!$result) {
                 border-bottom: 1px solid #ccc;
             }
         }
+
+        .s_form {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            margin-bottom: 20px;
+            width: 50%;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .labela1 {
+            font-weight: bold;
+        }
+
+        .submita1 {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+
+        .submita1:hover {
+            background-color: #0056b3;
+        }
     </style>
 
 </head>
@@ -116,19 +145,20 @@ if (!$result) {
         <option value="6">Monthly Attendance Sheet</option>
         <option value="3">Users</option>
     </select>
-    <form method="post" action="" class="s_form">
+    <form method="post" action="" class="s_form form-inline">
         <div class="form-group">
-            <label class="labela1 row-2" for="from_date">From Date:</label>
+            <label class="labela1" for="from_date">From Date:</label>
             <input type="date" class="form-control" name="from_date" id="from_date">
         </div>
 
         <div class="form-group">
-            <label class="labela1 row-2" for="to_date">To Date:</label>
+            <label class="labela1" for="to_date">To Date:</label>
             <input type="date" class="form-control" name="to_date" id="to_date">
         </div>
 
         <button type="submit" class="btn btn-primary submita1">Submit</button>
     </form>
+
     <?php {
     ?>
 
