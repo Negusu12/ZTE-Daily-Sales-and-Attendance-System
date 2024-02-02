@@ -11,7 +11,26 @@ if ($user_data['role'] == 2) {
     header("Location: login"); // Redirect to login page
     exit();
 }
+$sql = "SELECT * FROM daily_sales_view where 1=1";
 
+// Date range filter
+if (isset($_POST['from_date']) && isset($_POST['to_date'])) {
+    $from_date = $_POST['from_date'];
+    $to_date = $_POST['to_date'];
+
+    // Validate date format (you may need to adjust this based on your needs)
+    if (strtotime($from_date) && strtotime($to_date)) {
+        $sql .= " AND document_date BETWEEN '$from_date 00:00:00' AND '$to_date 23:59:59'";
+    } else {
+        // Handle invalid date format if needed
+        // You can add an error message or redirect back to the form with an error
+    }
+}
+
+$result = $con->query($sql);
+if (!$result) {
+    die("Invalid query!");
+}
 ?>
 
 <!DOCTYPE html>
@@ -61,6 +80,35 @@ if ($user_data['role'] == 2) {
                 border-bottom: 1px solid #ccc;
             }
         }
+
+        .s_form {
+            background-color: #ffffff;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            margin-bottom: 20px;
+            width: 35%;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .labela1 {
+            font-weight: bold;
+        }
+
+        .submita1 {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+
+        .submita1:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 
@@ -80,59 +128,63 @@ if ($user_data['role'] == 2) {
     <div class="username"> Report Daily Sales
     </div>
     <!-- Rest of the form -->
+    <form method="post" action="" class="s_form form-inline">
+        <div class="form-group">
+            <label for="from_date">From Date:</label>
+            <input type="date" class="form-control" name="from_date" id="from_date" value="<?php echo isset($_POST['from_date']) ? $_POST['from_date'] : ''; ?>">
+        </div>
 
+        <div class="form-group">
+            <label for="to_date">To Date:</label>
+            <input type="date" class="form-control" name="to_date" id="to_date" value="<?php echo isset($_POST['to_date']) ? $_POST['to_date'] : ''; ?>">
+        </div>
 
-    <?php
-    // Iterate over the unique ID numbers and display each set of records in a separate table
-    {
-        $result = mysqli_query($con, "SELECT * FROM daily_sales_view");
-    ?>
-        <section class="tbl-header table-responsive">
+        <button type="submit" class="btn btn-primary submita1">Filter</button>
+    </form>
 
-            <div class="table-responsive" id="no-more-tables">
-                <table class="table bg-white mydatatable" id="mydatatable">
-                    <thead class="tbll text-light">
-                        <tr>
-                            <th>Promoter's Name</th>
-                            <th>Promoter's Phone Number</th>
-                            <th>Shop</th>
-                            <th>Model</th>
-                            <th>Available Stock/Morning</th>
-                            <th>Number of Apparatus Sold</th>
-                            <th>Net Stock at the end of the Day</th>
-                            <th>Document Date</th>
-                            <th>Remark</th>
+    <section class="tbl-header table-responsive">
 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        // Iterate over the retrieved data and display in table rows
+        <div class="table-responsive" id="no-more-tables">
+            <table class="table bg-white mydatatable" id="mydatatable">
+                <thead class="tbll text-light">
+                    <tr>
+                        <th>Promoter's Name</th>
+                        <th>Promoter's Phone Number</th>
+                        <th>Shop</th>
+                        <th>Model</th>
+                        <th>Available Stock/Morning</th>
+                        <th>Number of Apparatus Sold</th>
+                        <th>Net Stock at the end of the Day</th>
+                        <th>Document Date</th>
+                        <th>Remark</th>
 
-                        while ($row = mysqli_fetch_assoc($result)) {
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    // Iterate over the retrieved data and display in table rows
 
-                            echo "<tr>";
-                            echo "<td>" . $row['promoter_name'] . "</td>";
-                            echo "<td>" . $row['promoter_phone'] . "</td>";
-                            echo "<td>" . $row['shop'] . "</td>";
-                            echo "<td>" . $row['model'] . "</td>";
-                            echo "<td>" . $row['available_stock'] . "</td>";
-                            echo "<td>" . $row['apparatus_sold'] . "</td>";
-                            echo "<td>" . $row['net_stock'] . "</td>";
-                            echo "<td>" . $row['document_date'] . "</td>";
-                            echo "<td>" . $row['remark_w'] . "</td>";
-                            echo "</tr>";
-                        }
-                        ?>
-                    </tbody>
-                </table>
-                <br>
-            </div>
-        </section>
+                    while ($row = mysqli_fetch_assoc($result)) {
 
-    <?php
-    }
-    ?>
+                        echo "<tr>";
+                        echo "<td>" . $row['promoter_name'] . "</td>";
+                        echo "<td>" . $row['promoter_phone'] . "</td>";
+                        echo "<td>" . $row['shop'] . "</td>";
+                        echo "<td>" . $row['model'] . "</td>";
+                        echo "<td>" . $row['available_stock'] . "</td>";
+                        echo "<td>" . $row['apparatus_sold'] . "</td>";
+                        echo "<td>" . $row['net_stock'] . "</td>";
+                        echo "<td>" . $row['document_date'] . "</td>";
+                        echo "<td>" . $row['remark_w'] . "</td>";
+                        echo "</tr>";
+                    }
+                    ?>
+                </tbody>
+            </table>
+            <br>
+        </div>
+    </section>
+
 
     <script src="js/sweetalert2.min.js"></script>
 

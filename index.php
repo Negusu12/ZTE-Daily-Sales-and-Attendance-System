@@ -180,7 +180,9 @@ $user_data = check_login($con);
     .class-signup:hover {
       color: #03949B;
     }
-
+    .class-logout:hover {
+      color: #03949B;
+    }
     .username {
       font-size: 22px;
       margin-top: 10px;
@@ -294,7 +296,7 @@ $user_data = check_login($con);
     </div>
     <?php if ($user_data['role'] == 1) : ?>
       <div class="div-signup">
-        <a href="signup.php" class="class-signup">signup </a>
+        <a href="signup.php" class="class-signup">Add User</a>
       </div>
     <?php endif; ?>
 
