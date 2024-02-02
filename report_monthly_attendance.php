@@ -68,7 +68,6 @@ if ($user_data['role'] == 2) {
 <body>
     <div class="div-logout">
         <a href="logout.php" class="class-logout">Logout</a><br>
-        <a href="signup.php" class="class-logout">Signup</a>
     </div>
     <div class="username">Monthly Attendance Sheet
     </div>
