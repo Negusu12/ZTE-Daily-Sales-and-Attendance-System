@@ -78,6 +78,7 @@ if ($user_data['role'] == 2) {
         <option value="">Reports</option>
         <option value="1">Report Daily Sales</option>
         <option value="2">Report Weekly Sales</option>
+        <option value="5">Attendance Sheet</option>
         <option value="3">Users</option>
     </select>
 

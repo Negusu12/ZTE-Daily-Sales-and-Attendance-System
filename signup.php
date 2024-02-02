@@ -78,7 +78,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 <div class="form-container">
                     <img src="images/logo.png" alt="illustration" class="illustration">
                     <img src="images/zte.png" alt="illustration" class="illustrationn">
-                    <h1 class="opacity">Signup</h1>
+                    <a href="index">
+                        <h1 class="opacity" align="center">Signup</h1>
+                    </a>
                     <form method="post">
                         <input type="text" name="user_name" onkeyup="lettersOnly(this)" placeholder="USERNAME" required />
                         <input type="password" name="password" placeholder="PASSWORD" required />

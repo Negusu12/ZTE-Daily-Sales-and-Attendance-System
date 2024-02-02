@@ -94,9 +94,8 @@ if (isset($_POST['submitp'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Change Password</title>
     <link rel="stylesheet" href="css/login.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
     <link rel="stylesheet" href="css/sweetalert2.min.css">
 
 </head>
@@ -110,15 +109,19 @@ if (isset($_POST['submitp'])) {
                 <div class="form-container">
                     <img src="images/logo.png" alt="illustration" class="illustration">
                     <img src="images/zte.png" alt="illustration" class="illustrationn">
-                    <h1 class="opacity">Change Password</h1>
+                    <a href="index">
+                        <h1 class="opacity" align="left">Change Password</h1>
+                    </a>
+
                     <form method="post">
+                        <label for="">User Name</label>
                         <input readonly style="text-transform: capitalize;" value="<?php echo $user_data['user_name']; ?>" />
                         <input type="text" style="display: none;" readonly name="id" value="<?php echo $user_data['id']; ?>">
-                        <label for="">current_password</label>
+                        <label for="">Current Password</label>
                         <input type="password" name="current_passwordd" oninvalid="this.setCustomValidity('Enter current_password Here')" oninput="setCustomValidity('')" required>
-                        <label for="">New_password</label>
+                        <label for="">New Password</label>
                         <input type="password" name="new_password" oninvalid="this.setCustomValidity('Enter new_password Here')" oninput="setCustomValidity('')" required>
-                        <label for="">Confirm_password</label>
+                        <label for="">Confirm Password</label>
                         <input type="password" name="confirm_password">
                         <button type="submit" name="submitp">SUBMIT</button>
                     </form>
@@ -128,7 +131,7 @@ if (isset($_POST['submitp'])) {
             <div class="theme-btn-container"></div>
         </section>
     </body>
-    <script src="asset/js/js.js"></script>
+    <script src="js/login.js"></script>
     <script src="js/sweetalert2.min.js"></script>
 
 </body>

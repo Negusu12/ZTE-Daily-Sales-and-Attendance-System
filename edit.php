@@ -1,5 +1,4 @@
 <?php
-
 include "connect.php";
 
 $id = $user_name = $password = $promoter_name = $promoter_phone = $shop = $status = $role = "";
@@ -29,41 +28,48 @@ if ($_SERVER["REQUEST_METHOD"] == 'GET') {
     $stmt->bind_result($id, $user_name, $promoter_name, $promoter_phone, $shop, $status, $role);
     $stmt->fetch();
   }
+  $stmt->close();
 } else {
   $id = $_POST["id"];
   $user_name = $_POST["user_name"];
+  $password = $_POST["password"];
   $promoter_name = $_POST["promoter_name"];
   $promoter_phone = $_POST["promoter_phone"];
   $shop = $_POST["shop"];
   $status = $_POST["status"];
   $role = $_POST["role"];
 
-  // Retrieve the old hashed password from the database
-  $sqlOldPassword = "SELECT password FROM users WHERE id=?";
-  $stmtOldPassword = $con->prepare($sqlOldPassword);
-  $stmtOldPassword->bind_param('i', $id);
-  if (!$stmtOldPassword->execute()) {
-    $error = "Error: " . $stmtOldPassword->error;
-  } else {
-    $stmtOldPassword->store_result();
-
-    if ($stmtOldPassword->num_rows == 0) {
-      $error = "Error: User not found";
+  // Check if the password is empty
+  if (empty($password)) {
+    // Retrieve the old hashed password from the database
+    $sqlOldPassword = "SELECT password FROM users WHERE id=?";
+    $stmtOldPassword = $con->prepare($sqlOldPassword);
+    $stmtOldPassword->bind_param('i', $id);
+    if (!$stmtOldPassword->execute()) {
+      $error = "Error: " . $stmtOldPassword->error;
     } else {
-      $stmtOldPassword->bind_result($old_password);
-      $stmtOldPassword->fetch();
-    }
-  }
-  $stmtOldPassword->close();
+      $stmtOldPassword->store_result();
 
-  // Check if a new password is provided
-  $new_password = isset($_POST["password"]) ? $_POST["password"] : $old_password;
+      if ($stmtOldPassword->num_rows == 0) {
+        $error = "Error: User not found";
+      } else {
+        $stmtOldPassword->bind_result($old_password);
+        $stmtOldPassword->fetch();
+      }
+    }
+    $stmtOldPassword->close();
+
+    // Use the old password if the new password is empty
+    $password = $old_password;
+  } else {
+    // Hash the new password if provided
+    $password = password_hash($password, PASSWORD_DEFAULT);
+  }
 
   if (empty($error)) {
-    $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
     $sql = "UPDATE users SET user_name=?, password=?, promoter_name=?, promoter_phone=?, shop=?, status=?, role=? WHERE id=?";
     $stmt = $con->prepare($sql);
-    $stmt->bind_param('sssssssi', $user_name, $hashed_password, $promoter_name, $promoter_phone, $shop, $status, $role, $id);
+    $stmt->bind_param('sssssssi', $user_name, $password, $promoter_name, $promoter_phone, $shop, $status, $role, $id);
 
     if (!$stmt->execute()) {
       $error = "Error: " . $stmt->error;
@@ -83,7 +89,6 @@ if ($_SERVER["REQUEST_METHOD"] == 'GET') {
     }
   }
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -212,7 +217,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'GET') {
 
             <div class="form-group">
               <label for="password">Password:</label>
-              <input type="password" name="password" value="<?php echo $password ?>" required>
+              <input type="password" name="password" placeholder="Leave empty to keep current password">
             </div>
             <div class="form-group">
               <label for="promoter_name">Promoter Name:</label>
