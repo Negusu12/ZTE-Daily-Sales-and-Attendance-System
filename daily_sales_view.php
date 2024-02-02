@@ -5,7 +5,11 @@ include("connect.php");
 include("functions.php");
 
 $user_data = check_login($con);
-
+if ($user_data['role'] == 2) {
+    // Redirect or display an error message
+    header("Location: login"); // Redirect to login page
+    exit();
+}
 ?>
 
 <!DOCTYPE html>

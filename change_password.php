@@ -62,7 +62,6 @@ if (isset($_POST['submitp'])) {
                         title: 'Password Updated Successfully',
                         showConfirmButton: true,
                         confirmButtonText: 'OK',
-                        timer: 2000
                     }).then(function() {
                         window.location.href = 'index.php';
                     });
