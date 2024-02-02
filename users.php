@@ -174,6 +174,12 @@ if ($user_data['role'] == 2) {
                 lengthMenu: [
                     [10, 25, 50, -1],
                     [10, 25, 50, "All"]
+                ],
+                columnDefs: [{
+                        targets: [2], // index of the "Password" column (zero-based index)
+                        visible: false // set to false to hide the column by default
+                    }
+                    // Add similar blocks for other columns you want to hide by default
                 ]
             });
 
