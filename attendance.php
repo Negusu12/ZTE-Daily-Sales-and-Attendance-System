@@ -328,6 +328,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <select class="input100" id="text" name="role" onchange="redirectToPage()">
                 <option value="">Select Option</option>
                 <option value="5">Report Daily Sales</option>
+                <option value="7">Change Password</option>
             </select>
         <?php endif; ?>
 
@@ -436,6 +437,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     window.location.href = "attendance_sheet";
                 } else if (selectedValue === "5") {
                     window.location.href = "index";
+                } else if (selectedValue === "7") {
+                    window.location.href = "change_password";
                 }
             }
         </script>

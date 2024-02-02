@@ -313,6 +313,7 @@ $user_data = check_login($con);
       <select class="input100" id="text" name="role" onchange="redirectToPage()">
         <option value="">Select Option</option>
         <option value="4">Attendance</option>
+        <option value="7">Change Password</option>
       </select>
     <?php endif; ?>
     <div class="username"> Hello <?php echo $user_data['promoter_name']; ?>!</div>
@@ -435,7 +436,10 @@ $user_data = check_login($con);
         window.location.href = "attendance_sheet";
       } else if (selectedValue === "6") {
         window.location.href = "report_monthly_attendance";
+      } else if (selectedValue === "7") {
+        window.location.href = "change_password";
       }
+
     }
   </script>
   <!-- select box redirection end -->
