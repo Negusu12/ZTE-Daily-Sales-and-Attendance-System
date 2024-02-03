@@ -179,28 +179,28 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                         <form method="post">
                             <div class="form-group">
                                 <label for="user_name">User Name:</label>
-                                <input type="text" name="user_name" onkeyup="lettersOnly(this)" placeholder="USERNAME" required />
+                                <input type="text" name="user_name" onkeyup="lettersOnly(this)" required />
                             </div>
                             <div class="form-group">
                                 <label for="password">Password:</label>
-                                <input type="password" name="password" placeholder="PASSWORD" required />
+                                <input type="password" name="password" required />
                             </div>
                             <div class="form-group">
                                 <label for="promoter_name">Promoter Name:</label>
-                                <input type="text" name="promoter_name" placeholder="PROMOTER NAME" required />
+                                <input type="text" name="promoter_name" required />
                             </div>
                             <div class="form-group">
                                 <label for="promoter_phone">Promoter Phone:</label>
-                                <input type="text" name="promoter_phone" placeholder="PROMOTER PHONE" required />
+                                <input type="text" name="promoter_phone" required />
                             </div>
                             <div class="form-group">
                                 <label for="shop">Shop:</label>
-                                <input type="text" name="shop" placeholder="SHOP" required />
+                                <input type="text" name="shop" required />
                             </div>
                             <div class="form-group">
-                                <label for="status">Status:</label>
+                                <label for="status">Role:</label>
                                 <select name="role" placeholder="ROLE" required>
-                                    <option value="">Select an Role</option>
+                                    <option value="">Select a Role</option>
                                     <option value="2">Sales</option>
                                     <option value="1">Admin</option>
                                 </select>

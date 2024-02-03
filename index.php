@@ -180,9 +180,11 @@ $user_data = check_login($con);
     .class-signup:hover {
       color: #03949B;
     }
+
     .class-logout:hover {
       color: #03949B;
     }
+
     .username {
       font-size: 22px;
       margin-top: 10px;
@@ -305,6 +307,7 @@ $user_data = check_login($con);
         <option value="">Reports</option>
         <option value="1">Report Daily Sales</option>
         <option value="2">Report Weekly Sales</option>
+        <option value="8">Report Monthly Sales</option>
         <option value="3">Users</option>
         <option value="5">Attendance Sheet</option>
         <option value="6">Monthly Attendance Sheet</option>
@@ -440,6 +443,8 @@ $user_data = check_login($con);
         window.location.href = "report_monthly_attendance";
       } else if (selectedValue === "7") {
         window.location.href = "change_password";
+      } else if (selectedValue === "8") {
+        window.location.href = "report_monthly_sales";
       }
 
     }

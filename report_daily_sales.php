@@ -120,6 +120,7 @@ if (!$result) {
         <select class="input100" id="text" name="role" onchange="redirectToPage()">
             <option value="">Reports</option>
             <option value="2">Report Weekly Sales</option>
+            <option value="4">Report Monthly Sales</option>
             <option value="1">Attendance Sheet</option>
             <option value="5">Monthly Attendance Sheet</option>
             <option value="3">Users</option>
@@ -280,6 +281,9 @@ if (!$result) {
                 window.location.href = "users";
             } else if (selectedValue === "5") {
                 window.location.href = "report_monthly_attendance";
+            } else if (selectedValue === "4") {
+                window.location.href = "report_monthly_sales";
+
             }
         }
     </script>

@@ -20,7 +20,7 @@ if ($user_data['role'] == 2) {
 <html>
 
 <head>
-    <title>Report Weekly Sales</title>
+    <title>Report Monthly Sales</title>
     <link rel="icon" type="image/png" href="images/logo.png" />
     <link rel="stylesheet" href="css/bootstrap/bootstrap.css">
     <link rel="stylesheet" href="css/bootstrap/dataTables.bootstrap4.min.css">
@@ -68,7 +68,7 @@ if ($user_data['role'] == 2) {
     <div class="div-logout">
         <a href="logout.php" class="class-logout">Logout</a>
     </div>
-    <div class="username"> Report Weekly Sales
+    <div class="username"> Report Monthly Sales
     </div>
     <!-- Rest of the form -->
 
@@ -76,14 +76,14 @@ if ($user_data['role'] == 2) {
         <select class="input100" id="text" name="role" onchange="redirectToPage()">
             <option value="">Reports</option>
             <option value="1">Report Daily Sales</option>
-            <option value="4">Report Monthly Sales</option>
+            <option value="4">Report Weekly Sales</option>
             <option value="2">Attendance Sheet</option>
             <option value="5">Monthly Attendance Sheet</option>
             <option value="3">Users</option>
         </select>
     <?php endif; ?>
     <?php {
-        $result = mysqli_query($con, "SELECT * FROM weekly_sales_report");
+        $result = mysqli_query($con, "SELECT * FROM monthly_sales_report");
     ?>
 
         <section class="tbl-header table-responsive">
@@ -94,9 +94,10 @@ if ($user_data['role'] == 2) {
                         <tr>
                             <th>Promoter's Name</th>
                             <th>Shop</th>
-                            <th>week_number</th>
-                            <th>week_start_date</th>
-                            <th>week_end_date</th>
+                            <th>Year</th>
+                            <th>Month</th>
+                            <th>month_start_date</th>
+                            <th>month_end_date</th>
                             <th>a33_core_sold</th>
                             <th>a31_lite_sold</th>
                             <th>blade_a31_sold</th>
@@ -118,9 +119,10 @@ if ($user_data['role'] == 2) {
                             echo "<tr>";
                             echo "<td>" . $row['promoter_name'] . "</td>";
                             echo "<td>" . $row['shop'] . "</td>";
-                            echo "<td>" . $row['week_number'] . "</td>";
-                            echo "<td>" . date('l F j Y H:i', strtotime($row['week_start_date'])) . "</td>";
-                            echo "<td>" . date('l F j Y H:i', strtotime($row['week_end_date'])) . "</td>";
+                            echo "<td>" . $row['year_number'] . "</td>";
+                            echo "<td>" . $row['month_name'] . "</td>";
+                            echo "<td>" . date('l F j Y H:i', strtotime($row['month_start_date'])) . "</td>";
+                            echo "<td>" . date('l F j Y H:i', strtotime($row['month_end_date'])) . "</td>";
                             echo "<td>" . $row['total_a33_core_sold'] . "</td>";
                             echo "<td>" . $row['total_a31_lite_sold'] . "</td>";
                             echo "<td>" . $row['total_blade_a31_sold'] . "</td>";
@@ -214,8 +216,7 @@ if ($user_data['role'] == 2) {
             } else if (selectedValue === "5") {
                 window.location.href = "report_monthly_attendance";
             } else if (selectedValue === "4") {
-                window.location.href = "report_monthly_sales";
-
+                window.location.href = "report_weekly_sales.php";
             }
         }
     </script>
