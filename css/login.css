@@ -1,5 +1,5 @@
 :root {
-    --background: #03949B;
+    --background: #0c8086;
     --color: #ffffff;
     --primary-color: #B2B435;
 }
@@ -181,14 +181,14 @@ h1 {
 .illustration {
     position: absolute;
     top: -14%;
-    right: -222px;
+    right: -333px;
     width: 90%;
 }
 
 .illustrationn {
     position: absolute;
     top: -14%;
-    right: 300px;
+    right: 350px;
     width: 90%;
 }
 
@@ -291,7 +291,7 @@ h1 {
     }
 
     .login-container {
-        width: 100%;
+        width: 85%;
     }
 
     .illustration,
