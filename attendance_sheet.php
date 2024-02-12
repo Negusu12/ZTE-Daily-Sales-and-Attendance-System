@@ -197,7 +197,7 @@ if (!$result) {
                             echo "<td>" . $row['shop'] . "</td>";
                             echo "<td>" . $row['date'] . "</td>";
                             echo "<td>" . $row['check_in'] . "</td>";
-                            echo "<td>" . $row['attendance_time'] . "</td>";
+                            echo "<td>" . date("Y-m-d h:i:s A", strtotime($row['attendance_time'])) . "</td>";
                             echo "<td>" . $row['remark_check_in'] . "</td>";
                             if (!empty($row['latitude']) && !empty($row['longitude'])) {
                                 // Convert latitude and longitude to a Google Maps link
@@ -207,7 +207,7 @@ if (!$result) {
                                 echo "<td></td>"; // Display an empty cell if latitude or longitude is empty
                             }
                             echo "<td>" . $row['check_out'] . "</td>";
-                            echo "<td>" . $row['check_out_time'] . "</td>";
+                            echo "<td>" . date("Y-m-d h:i:s A", strtotime($row['check_out_time'])) . "</td>";
                             echo "<td>" . $row['remark_check_out'] . "</td>";
                             if (!empty($row['latitude_check_out']) && !empty($row['longitude_check_out'])) {
                                 // Convert latitude and longitude to a Google Maps link
