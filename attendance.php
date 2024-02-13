@@ -1,4 +1,6 @@
 <?php
+date_default_timezone_set('UTC');
+
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
@@ -55,8 +57,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $remark = $_POST['remark'];
         $date = $_POST['date'];
 
-        $sql = $con->prepare("INSERT INTO check_in (user_id, check_in, latitude, longitude, remark, date) VALUES (?, ?, ?, ?, ?, ?)");
-        $sql->bind_param("isssss", $userID, $checkIn, $latitude, $longitude, $remark, $date);
+        $attendance_time = date('Y-m-d H:i:s', strtotime('+3 hours'));
+        $sql = $con->prepare("INSERT INTO check_in (user_id, check_in, latitude, longitude, remark, attendance_time, date) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $sql->bind_param("issssss", $userID, $checkIn, $latitude, $longitude, $remark, $attendance_time, $date);
+
 
 
         if ($sql->execute()) {
@@ -96,8 +100,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $remark = $_POST['remark'];
         $date = $_POST['date'];
 
-        $sql = $con->prepare("INSERT INTO check_out (user_id, check_out, latitude_check_out, longitude_check_out, remark, date) VALUES (?, ?, ?, ?, ?, ?)");
-        $sql->bind_param("isssss", $userID, $checkOut, $latitudeCheckOut, $longitudeCheckOut, $remark, $date);
+        $check_out_time = date('Y-m-d H:i:s', strtotime('+3 hours'));
+        $sql = $con->prepare("INSERT INTO check_out (user_id, check_out, latitude_check_out, longitude_check_out, remark, check_out_time, date) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $sql->bind_param("issssss", $userID, $checkOut, $latitudeCheckOut, $longitudeCheckOut, $remark, $check_out_time, $date);
 
         if ($sql->execute()) {
             echo "<script>
