@@ -222,8 +222,8 @@ if (!$result) {
                 buttons: ['excel', 'pdf', 'colvis'],
                 pagingType: 'full_numbers',
                 lengthMenu: [
-                    [10, 25, 50, -1],
-                    [10, 25, 50, "All"]
+                    [11, 25, 50, -1],
+                    [11, 25, 50, "All"]
                 ]
             });
 

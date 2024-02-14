@@ -391,6 +391,24 @@ $user_data = check_login($con);
               <td><input type="number" name="mf286c_sold" id="mf286c_sold" oninput="calculateStock('mf286c')"></td>
               <td><input type="number" name="mf286c_left" id="mf286c_left" readonly class="ro"></td>
             </tr>
+            <tr>
+              <td>V50 Design</td>
+              <td><input type="number" name="V50_Design_available" id="V50_Design_available"></td>
+              <td><input type="number" name="V50_Design_sold" id="V50_Design_sold" oninput="calculateStock('V50_Design')"></td>
+              <td><input type="number" name="V50_Design_left" id="V50_Design_left" readonly class="ro"></td>
+            </tr>
+            <tr>
+              <td>A54</td>
+              <td><input type="number" name="A54_available" id="A54_available"></td>
+              <td><input type="number" name="A54_sold" id="A54_sold" oninput="calculateStock('A54')"></td>
+              <td><input type="number" name="A54_left" id="A54_left" readonly class="ro"></td>
+            </tr>
+            <tr>
+              <td>V40</td>
+              <td><input type="number" name="V40_available" id="V40_available"></td>
+              <td><input type="number" name="V40_sold" id="V40_sold" oninput="calculateStock('V40')"></td>
+              <td><input type="number" name="V40_left" id="V40_left" readonly class="ro"></td>
+            </tr>
           </tbody>
         </table>
         <br>
@@ -412,7 +430,7 @@ $user_data = check_login($con);
     }
 
     // Add event listeners for both input fields in each row
-    ['a33_core', 'a31_lite', 'blade_a31', 'blade_a51', 'blade_a71', 'blade_v30', 'mf971L', 'mf286c'].forEach(function(model) {
+    ['a33_core', 'a31_lite', 'blade_a31', 'blade_a51', 'blade_a71', 'blade_v30', 'mf971L', 'mf286c', 'V50_Design', 'A54', 'v40'].forEach(function(model) {
       document.getElementById(model + '_available').addEventListener('input', function() {
         calculateStock(model);
       });
