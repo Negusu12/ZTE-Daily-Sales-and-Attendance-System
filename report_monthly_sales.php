@@ -106,6 +106,9 @@ if ($user_data['role'] == 2) {
                             <th>blade_v30_sold</th>
                             <th>mf971L_sold</th>
                             <th>mf286c_sold</th>
+                            <th>V50_Design</th>
+                            <th>A54</th>
+                            <th>V40</th>
                             <th>Total Sold</th>
 
                         </tr>
@@ -131,6 +134,9 @@ if ($user_data['role'] == 2) {
                             echo "<td>" . $row['total_blade_v30_sold'] . "</td>";
                             echo "<td>" . $row['total_mf971L_sold'] . "</td>";
                             echo "<td>" . $row['total_mf286c_sold'] . "</td>";
+                            echo "<td>" . $row['total_V50_Design_sold'] . "</td>";
+                            echo "<td>" . $row['total_A54_sold'] . "</td>";
+                            echo "<td>" . $row['total_V40_sold'] . "</td>";
                             echo "<td>" . $row['total_sold'] . "</td>";
 
                             echo "</tr>";
