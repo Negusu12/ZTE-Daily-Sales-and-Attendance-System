@@ -93,12 +93,14 @@ if ($user_data['role'] == 2) {
                     <tr>
                         <th>Sl_No</th>
                         <th>promoter_name</th>
+                        <th>Year</th>
                         <th>Month</th>
-                        <th>Date</th>
-                        <th>Check In</th>
-                        <th>Check In time</th>
-                        <th>Check Out</th>
-                        <th>Check Out time</th>
+                        <th>Present Days</th>
+                        <?php
+                        for ($i = 1; $i <= 31; $i++) {
+                            echo "<th>Day " . $i . "</th>";
+                        }
+                        ?>
                     </tr>
                 </thead>
                 <tbody>
@@ -107,20 +109,20 @@ if ($user_data['role'] == 2) {
                     while ($row = mysqli_fetch_assoc($result)) {
                         echo "<tr>";
                         echo "<td>" . $rowCounter . "</td>";
-                        echo "<td>" . $row['promoter_name'] . "</td>";
+                        echo "<td>" . $row['promoter'] . "</td>";
+                        echo "<td>" . $row['year'] . "</td>";
                         echo "<td>" . $row['month'] . "</td>";
-                        echo "<td>" . $row['date'] . "</td>";
-                        echo "<td>" . $row['check_in'] . "</td>";
-                        echo "<td>" . $row['attendance_time'] . "</td>";
-                        echo "<td>" . $row['check_out'] . "</td>";
-                        echo "<td>" . $row['check_out_time'] . "</td>";
+                        echo "<td>" . $row['total_yes'] . "</td>";
+                        for ($i = 1; $i <= 31; $i++) {
+                            echo "<td>" . $row['day_' . $i] . "</td>";
+                        }
                         echo "</tr>";
                         $rowCounter++;
                     }
                     ?>
                 </tbody>
-            </table>
-            <br>
+
+                <br>
         </div>
     </section>
 
