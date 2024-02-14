@@ -207,3 +207,48 @@ ADD COLUMN V40_remark VARCHAR(255) DEFAULT NULL;
         zte1.daily_sales.V40_remark AS remark
     FROM
         zte1.daily_sales
+
+
+
+
+
+         CREATE or replace VIEW zte1.weekly_sales_report AS
+SELECT 
+    zte1.daily_sales.promoter_name AS promoter_name,
+    zte1.daily_sales.shop AS shop,
+    YEARWEEK(zte1.daily_sales.doc_date, 1) AS week_number,
+    MIN(zte1.daily_sales.doc_date) AS week_start_date,
+    MAX(zte1.daily_sales.doc_date) AS week_end_date,
+    COALESCE(SUM(CAST(zte1.daily_sales.a33_core_sold AS SIGNED)), 0) AS total_a33_core_sold,
+    COALESCE(SUM(CAST(zte1.daily_sales.a31_lite_sold AS SIGNED)), 0) AS total_a31_lite_sold,
+    COALESCE(SUM(CAST(zte1.daily_sales.blade_a31_sold AS SIGNED)), 0) AS total_blade_a31_sold,
+    COALESCE(SUM(CAST(zte1.daily_sales.blade_a51_sold AS SIGNED)), 0) AS total_blade_a51_sold,
+    COALESCE(SUM(CAST(zte1.daily_sales.blade_a71_sold AS SIGNED)), 0) AS total_blade_a71_sold,
+    COALESCE(SUM(CAST(zte1.daily_sales.blade_v30_sold AS SIGNED)), 0) AS total_blade_v30_sold,
+    COALESCE(SUM(CAST(zte1.daily_sales.mf971L_sold AS SIGNED)), 0) AS total_mf971L_sold,
+    COALESCE(SUM(CAST(zte1.daily_sales.mf286c_sold AS SIGNED)), 0) AS total_mf286c_sold,
+    COALESCE(SUM(CAST(zte1.daily_sales.V50_Design_sold AS SIGNED)), 0) AS total_V50_Design_sold,
+    COALESCE(SUM(CAST(zte1.daily_sales.A54_sold AS SIGNED)), 0) AS total_A54_sold,
+    COALESCE(SUM(CAST(zte1.daily_sales.V40_sold AS SIGNED)), 0) AS total_V40_sold,
+    COALESCE(
+        SUM(
+            CAST(zte1.daily_sales.a33_core_sold AS SIGNED) +
+            CAST(zte1.daily_sales.a31_lite_sold AS SIGNED) +
+            CAST(zte1.daily_sales.blade_a31_sold AS SIGNED) +
+            CAST(zte1.daily_sales.blade_a51_sold AS SIGNED) +
+            CAST(zte1.daily_sales.blade_a71_sold AS SIGNED) +
+            CAST(zte1.daily_sales.blade_v30_sold AS SIGNED) +
+            CAST(zte1.daily_sales.mf971L_sold AS SIGNED) +
+            CAST(zte1.daily_sales.mf286c_sold AS SIGNED) +
+            CAST(zte1.daily_sales.V50_Design_sold AS SIGNED) +
+            CAST(zte1.daily_sales.A54_sold AS SIGNED) +
+            CAST(zte1.daily_sales.V40_sold AS SIGNED)
+        ), 0
+    ) AS total_sold
+FROM
+    zte1.daily_sales
+WHERE
+    YEARWEEK(zte1.daily_sales.doc_date, 1) <= YEARWEEK(NOW(), 1)
+    AND zte1.daily_sales.doc_date <= NOW()
+GROUP BY
+    zte1.daily_sales.promoter_name, week_number;
