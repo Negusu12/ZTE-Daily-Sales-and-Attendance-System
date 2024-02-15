@@ -60,7 +60,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 <html lang="en">
 
 <head>
-    <title>Signup</title>
+    <title>Add User</title>
+    <link rel="icon" type="image/png" href="images/logo.png" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/png" href="assets/images/icons/favicon.ico" />
