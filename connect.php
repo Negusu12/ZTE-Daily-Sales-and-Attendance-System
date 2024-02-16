@@ -1,6 +1,6 @@
 <?php
 
-$con = new mysqli('localhost', 'root', '', 'zte1');
+$con = new mysqli('localhost', 'root', '', 'zte_abh');
 if (!$con) {
     echo "Connection Succesful";
 }
