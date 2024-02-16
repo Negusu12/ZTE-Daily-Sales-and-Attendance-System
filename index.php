@@ -430,7 +430,7 @@ $user_data = check_login($con);
     }
 
     // Add event listeners for both input fields in each row
-    ['a33_core', 'a31_lite', 'blade_a31', 'blade_a51', 'blade_a71', 'blade_v30', 'mf971L', 'mf286c', 'V50_Design', 'A54', 'v40'].forEach(function(model) {
+    ['a33_core', 'a31_lite', 'blade_a31', 'blade_a51', 'blade_a71', 'blade_v30', 'mf971L', 'mf286c', 'V50_Design', 'A54', 'V40'].forEach(function(model) {
       document.getElementById(model + '_available').addEventListener('input', function() {
         calculateStock(model);
       });
